@@ -1,66 +1,75 @@
 package com.ks.hrms.core.component;
 
-import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
-
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class FormFieldFactory {
 
-    private  ArrayList<FormField> formFields;
+    public static final String TRUE = "TRUE";
 
-    public void addFormFields(ArrayList<FormField> formFields){
+    private ArrayList<FormField> formFields;
+    private LinkedHashMap<String, AbstractField> fieldMap;
+
+    public void addFormFields(ArrayList<FormField> formFields) {
         this.formFields = formFields;
-        for (FormField f: this.formFields){
-            f.parseAttributes(this);
+        fieldMap = new LinkedHashMap<>();
+        for (FormField f : this.formFields) {
+            parseAttributes(f);
         }
     }
 
-    /**
-     * 根据类型生成对应的组件
-     * @return
-     */
-    public Parent generateComponent(FormField f,String attribute){
-        switch (attribute){
+    private void parseField(FormField formField, AbstractField field) {
+        field.setReadOnly(formField.isReadOnly());
+        field.setRequired(formField.isRequired());
+        field.setBreak(formField.isBreak());
+        field.setWidth(formField.getWidth());
+        field.setHeight(formField.getHeight());
+        field.setPos(formField.getPos());
+        field.setDefaultValue(formField.getDefValue());
+    }
+
+    public void parseAttributes(FormField formField) {
+
+        System.out.println(formField.getId());
+        switch (formField.getType()) {
             case FormField.TYPE_TEXTFIELD:
-                return generateTextField(f);
+                CustomTextField textField = new CustomTextField(formField.getId(), formField.getCaption());
+                parseField(formField, textField);
+                fieldMap.put(formField.getId(), textField);
+                break;
             case FormField.TYPE_BUTTON:
-                return generateButton(f);
+                CustomButton button = new CustomButton(formField.getId(), formField.getCaption());
+                parseField(formField, button);
+                fieldMap.put(formField.getId(), button);
+                break;
+            case FormField.GROUP_BUTTON:
+                CustomButtonGroup btnGroup = new CustomButtonGroup(formField.getId());
+                btnGroup.addButtons(formField.getItemList());
+                parseField(formField, btnGroup);
+                fieldMap.put(formField.getId(), btnGroup);
+                break;
+            case FormField.GROUP_RADIO:
+                CustomRadioBox radGroup = new CustomRadioBox(formField.getId(),formField.getCaption(),formField.getDefValue());
+                radGroup.addSelect(formField.getItemList());
+                parseField(formField, radGroup);
+                fieldMap.put(formField.getId(), radGroup);
+                break;
+            case FormField.GROUP_CHECKBOX:
+                CustomCheckBox checkGroup = new CustomCheckBox(formField.getId(),formField.getCaption(),formField.getDefValue());
+                checkGroup.addSelect(formField.getItemList());
+                parseField(formField,checkGroup);
+                fieldMap.put(formField.getId(),checkGroup);
             default:
-                return null;
+                break;
         }
-    }
-
-    private static Parent generateTextField(FormField f){
-        HBox root = new HBox();
-        Label caption = new Label(f.getCaption());
-        caption.setMinWidth(60);
-        caption.setMaxWidth(100);
-        String defValue = "";
-        if(null!=f.getDefaultValue()){
-            defValue = f.getDefaultValue().toString();
-        }
-
-        TextField input = new TextField(defValue);
-        if(f.getWidth() != 0){
-            input.setPrefWidth(f.getWidth());
-            System.out.println(f.getWidth());
-        }
-        root.getChildren().addAll(caption,input);
-        root.setSpacing(5);
-        f.setComponent(input);
-        return root;
-    }
-
-    private static Parent generateButton(FormField f){
-        Button button = new Button(f.getCaption());
-        return button;
     }
 
     public ArrayList<FormField> getFormFields() {
         return formFields;
+    }
+
+    public HashMap<String, AbstractField> getFieldMap() {
+        return fieldMap;
     }
 }

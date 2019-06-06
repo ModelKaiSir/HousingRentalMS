@@ -1,0 +1,145 @@
+.custom-btn{
+    -fx-min-width: 90px;
+    -fx-min-height: 90px;
+    -fx-border-width: 2px;
+    -fx-border-style: solid;
+    -fx-border-color: cornsilk;
+    -fx-border-radius: 50%;
+    -fx-background-radius: 50%;
+}
+.custom-btn-color-success{
+    -fx-text-fill: white;
+    -fx-background-color: #38b03f;
+}
+
+.custom-btn-color-primary{
+    -fx-text-fill: white;
+    -fx-background-color: #3280FC;
+}
+
+.custom-btn-color-warning{
+    -fx-background-color: #F1A325;
+}
+
+.custom-btn-color-danger{
+    -fx-background-color: #EA644A;
+}
+
+.custom-btn-color-info{
+    -fx-background-color: #03B8CF;
+}
+
+.custom-btn-color-special{
+    -fx-background-color: #8666B8;
+}
+
+.jfx-snackbar{
+    -fx-border-style: solid;
+    -fx-border-width: 1px;
+    -fx-border-radius: 15%;
+}
+
+.jfx-snackbar-content {
+    -fx-background-color: rgba(0, 0, 0, 0.45);
+    -fx-padding: 5;
+    -fx-spacing: 5;
+}
+
+.jfx-snackbar-toast {
+    -fx-text-fill: WHITE;
+}
+
+.notify-error .jfx-snackbar-toast {
+    -fx-text-fill: WHITE;
+}
+
+.notify-error .jfx-snackbar-content {
+    -fx-background-color: rgba(255, 51, 58, 0.88);
+    -fx-padding: 5;
+    -fx-spacing: 5;
+}
+
+.jfx-snackbar-action {
+    -fx-text-fill: #ff4081;
+}
+
+.custom-tab .tab-header-background {
+    -fx-background-color: #48a5fc;
+}
+
+.custom-textarea{
+    -fx-background-color: rgba(127, 195, 252, 0.1);
+}
+
+.tex-result{
+    -fx-background-color: rgba(0, 0, 0, 0.18);
+}
+
+.about-bg{
+    -fx-background-image: url("bg.jpg");
+    -fx-background-repeat:  no-repeat;
+    -fx-background-size: 100%;
+}
+
+.work-bg{
+    -fx-background-image: url("bg2.jpg");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 100%;
+}
+
+/* Icons Demo */
+.icon {
+    -fx-text-fill: #FE774D;
+    -fx-padding: 10;
+    -fx-cursor: hand;
+}
+
+.icons-rippler {
+    -jfx-rippler-fill: BLUE;
+    -jfx-mask-type: CIRCLE;
+}
+
+.icons-rippler:hover {
+    -fx-cursor: hand;
+}
+
+.animated-option-button {
+    -fx-background-color: #F1F1F1;
+    -fx-background-radius: 50px;
+    -fx-pref-height: 50px;
+    -fx-pref-width: 50px;
+    -fx-min-width: -fx-pref-width;
+    -fx-max-width: -fx-pref-width;
+    -fx-min-height: -fx-pref-height;
+    -fx-max-height: -fx-pref-height;
+    -jfx-button-type: RAISED;
+}
+.animated-option-button .jfx-rippler{
+    -jfx-rippler-fill: rgb(113, 118, 114);
+}
+
+.animated-option-sub-success {
+    -fx-background-color: rgb(13, 203, 60);
+}
+
+.animated-option-sub-base {
+    -fx-background-color: #43609C;
+}
+
+.animated-option-sub-waring {
+    -fx-background-color: #e22e23;
+}
+
+.animated-option-sub-m{
+    -fx-background-color: #f2d10a;
+}
+.animated-option-sub-ry{
+    -fx-background-color: #EA644A;
+}
+.animated-option-sub-y{
+    -fx-background-color: #8666B8;
+}
+
+animated-option-sub-cl{
+    -fx-background-color: #151144;
+}
