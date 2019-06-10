@@ -3,10 +3,7 @@ package com.ks.hrms.core.component;
 import javafx.scene.Parent;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
-import javafx.scene.shape.Box;
 
 import java.util.ArrayList;
 import java.util.List;
