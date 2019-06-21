@@ -1,4 +1,4 @@
-package com.ks.hrms.core;
+package com.ks.hrms.core.context;
 
 /**
  * 程序版本更新

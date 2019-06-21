@@ -1,4 +1,4 @@
-package com.ks.hrms.core;
+package com.ks.hrms.core.context;
 
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;

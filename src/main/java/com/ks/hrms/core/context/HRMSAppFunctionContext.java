@@ -1,6 +1,5 @@
-package com.ks.hrms.core;
+package com.ks.hrms.core.context;
 
-import com.sun.deploy.ui.AppInfo;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 

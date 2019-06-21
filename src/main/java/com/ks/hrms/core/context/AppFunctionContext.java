@@ -1,4 +1,4 @@
-package com.ks.hrms.core;
+package com.ks.hrms.core.context;
 
 import org.springframework.context.ApplicationContextAware;
 

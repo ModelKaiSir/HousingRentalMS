@@ -1,9 +1,13 @@
-package com.ks.hrms.core.component;
+package com.ks.hrms.core.component.form;
 
+import com.ks.hrms.core.component.ui.AbstractCustomParent;
+import com.ks.hrms.core.component.FormField;
+import com.ks.hrms.core.component.FormFieldFactory;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Tab;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 
@@ -13,18 +17,17 @@ import java.util.Map;
 /**
  * 表单组件
  */
-public class FreeForm extends Tab {
+public class FreeForm extends AnchorPane {
 
     private FormFieldFactory fieldFactory;
     private int row = 0, col = 0;
     private Pos pos;
 
-    private FreeForm(String caption, ArrayList<FormField> formFields) {
-        this(caption, null, formFields);
+    private FreeForm(ArrayList<FormField> formFields) {
+        this(null, formFields);
     }
 
-    private FreeForm(String caption, Pos pos,ArrayList<FormField> formFields) {
-        setText(caption);
+    private FreeForm(Pos pos,ArrayList<FormField> formFields) {
         fieldFactory = new FormFieldFactory();
         fieldFactory.addFormFields(formFields);
         this.pos = pos;
@@ -46,10 +49,10 @@ public class FreeForm extends Tab {
     private void generateContent() {
 
         GridPane body = beforeGenerateContent();
-        for (Map.Entry<String, AbstractField> fieldEntry : fieldFactory.getFieldMap().entrySet()) {
+        for (Map.Entry<String, AbstractCustomParent> fieldEntry : fieldFactory.getFieldMap().entrySet()) {
             System.out.println("row = " + row + " col = " + col);
-            AbstractField field = fieldEntry.getValue();
-            Parent component = field.getComponent();
+            AbstractCustomParent field = fieldEntry.getValue();
+            Parent component = field.value();
             body.add(component, col, row);
 
             if (null != field.getPos()) {
@@ -57,7 +60,7 @@ public class FreeForm extends Tab {
                 GridPane.setValignment(component, field.getPos().getVpos());
             }
 
-            if (field.isBreak()) {
+            if (field.isBreakable()) {
                 col++;
             } else {
                 row++;
@@ -73,14 +76,14 @@ public class FreeForm extends Tab {
         for (ColumnConstraints column : body.getColumnConstraints()) {
             column.setPrefWidth(GridPane.USE_COMPUTED_SIZE);
         }
-        setContent(body);
+        getChildren().add(body);
     }
 
-    public static FreeForm createFreeForm(String caption, ArrayList<FormField> formFields) {
-        return new FreeForm(caption, formFields);
+    public static FreeForm createFreeForm(ArrayList<FormField> formFields) {
+        return new FreeForm(formFields);
     }
 
     public static FreeForm createFreeForm(String caption, Pos pos, ArrayList<FormField> formFields) {
-        return new FreeForm(caption, pos, formFields);
+        return new FreeForm(pos, formFields);
     }
 }

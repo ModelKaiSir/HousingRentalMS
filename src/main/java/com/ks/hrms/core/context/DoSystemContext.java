@@ -1,8 +1,7 @@
-package com.ks.hrms.core;
+package com.ks.hrms.core.context;
 
 import com.ks.hrms.dao.SystemDao;
 import javafx.beans.property.SimpleStringProperty;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class DoSystemContext implements SystemContext {

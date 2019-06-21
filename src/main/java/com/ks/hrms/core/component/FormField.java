@@ -37,39 +37,33 @@ public class FormField {
     /**
      * 只读
      */
-    public static final String ATTRIBUTE_READONLY = "RED";
+    public static final String ATTRIBUTE_VALUE_READONLY = "READONLY";
     /**
      * 必填
      */
-    public static final String ATTRIBUTE_REQ = "REQ";
+    public static final String ATTRIBUTE_VALUE_REQUIRED = "REQUIRED";
     public static final String ATTRIBUTE_ALIGNMENT = "ALIGNMENT";
     /**
      * 默认值
      */
     public static final String ATTRIBUTE_DEF_VALUE = "DEFV";
 
-    public static final String ATTRIBUTE_TYPE_TEXTFIELD = "TYPE=TEXTFIELD;";
-    public static final String TYPE_TEXTFIELD = "TEXTFIELD";
-    public static final String ATTRIBUTE_TYPE_BUTTON = "TYPE=BUTTON;";
-    public static final String TYPE_BUTTON = "BUTTON";
-    public static final String ATTRIBUTE_TYPE_SELECT_FIELD = "TYPE=SELECT;";
-    public static final String TYPE_SELECT = "SELECT";
-    public static final String ATTRIBUTE_TYPE_CHECKBOX = "TYPE=CHECKBOX;";
-    public static final String TYPE_CHECKBOX = "CHECKBOX";
-    public static final String ATTRIBUTE_TYPE_RADIO_BOX = "TYPE=RADIOBUTTON;";
-    public static final String TYPE_RADIO_BTN = "RADIOBUTTON";
-    public static final String ATTRIBUTE_TYPE_GROUP_BUTTON = "TYPE=GROUP_BUTTON;";
+    public static final String TEXTFIELD = "TYPE=TEXTFIELD;";
+    public static final String ATTRIBUTE_TYPE_TEXTFIELD = "TEXTFIELD";
+    public static final String BUTTON = "TYPE=BUTTON;";
+    public static final String ATTRIBUTE_TYPE_BUTTON = "BUTTON";
+    public static final String BUTTONS = "TYPE=GROUP_BUTTON;";
     public static final String GROUP_BUTTON = "GROUP_BUTTON";
-    public static final String GROUP_TEXTFIELD = "GROUP_TEXTFIELD";
-    public static final String GROUP_RADIO = "GROUP_RADIO";
-    public static final String ATTRIBUTE_TYPE_GROUP_RADIO = "TYPE=GROUP_RADIO;";
+    public static final String GROUP_RADIO_BUTTON = "GROUP_RADIO_BUTTON";
+    public static final String RADIO_BUTTON = "TYPE=GROUP_RADIO_BUTTON;";
     public static final String GROUP_CHECKBOX = "GROUP_CHECKBOX";
-    public static final String ATTRIBUTE_TYPE_GROUP_CHECKBOX = "TYPE=GROUP_CHECKBOX;";
-    public static final String GROUP_COMPONENT = "GROUP_COMPONENT";
+    public static final String CHECKBOX = "TYPE=GROUP_CHECKBOX;";
+    public static final String GROUP_COMBOBOX = "GROUP_COMBOBOX";
+    public static final String COMBOBOX = "TYPE=GROUP_COMBOBOX;";
 
-    public static final String ATTRIBUTE_VALUE_BREAK = "BREAK=TRUE;";
-    public static final String ATTRIBUTE_VALUE_READONLY = "RED=TRUE;";
-    public static final String ATTRIBUTE_VALUE_REQ = "REQ=TRUE;";
+    public static final String BREAK = "BREAK=TRUE;";
+    public static final String READONLY = "READONLY=TRUE;";
+    public static final String REQUIRED = "REQUIRED=TRUE;";
 
     /**
      * 字段
@@ -201,7 +195,7 @@ public class FormField {
     }
 
     public boolean isReadOnly(){
-        String attribute = getAttribute(ATTRIBUTE_READONLY,null);
+        String attribute = getAttribute(ATTRIBUTE_VALUE_READONLY,null);
         if(null==attribute){
             return false;
         }
@@ -209,7 +203,7 @@ public class FormField {
     }
 
     public boolean isRequired(){
-        String attribute = getAttribute(ATTRIBUTE_VALUE_REQ,null);
+        String attribute = getAttribute(REQUIRED,null);
         if(null==attribute){
             return false;
         }

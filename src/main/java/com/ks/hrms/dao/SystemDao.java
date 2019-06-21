@@ -1,6 +1,9 @@
 package com.ks.hrms.dao;
 
+import com.ks.hrms.core.component.FormField;
 import org.springframework.stereotype.Repository;
+
+import java.util.ArrayList;
 
 @Repository
 public class SystemDao extends BaseDao {
@@ -21,6 +24,15 @@ public class SystemDao extends BaseDao {
 
     public void update(SystemInfo sysInfo){
         this.getTemplate().update(SAVE_SYS_INFO,sysInfo.getCompanyName(),sysInfo.getVer(),sysInfo.getAbout(),"SYSTEM");
+    }
+
+    public ArrayList<FormField.FormFieldAttribute> getItemList(String query){
+        final ArrayList<FormField.FormFieldAttribute> result = new ArrayList<>();
+        this.getTemplate().query(query,resultSet -> {
+            result.add(new FormField.FormFieldAttribute(resultSet.getString(1),resultSet.getString(2)));
+        });
+
+        return result;
     }
 
     public static class SystemInfo{

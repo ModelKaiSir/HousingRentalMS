@@ -1,21 +1,29 @@
 package com.ks.hrms.controller;
 
 import com.jfoenix.controls.JFXListView;
+import com.jfoenix.controls.JFXProgressBar;
+import com.jfoenix.controls.JFXSpinner;
 import com.jfoenix.controls.JFXTabPane;
+import com.ks.hrms.core.app.AppFunctionFactory;
+import com.ks.hrms.core.app.AppFunctionMain;
+import com.ks.hrms.core.app.TestAppFunctionMain;
 import com.ks.hrms.core.component.CustomStyleClass;
 import com.ks.hrms.core.component.FormField;
-import com.ks.hrms.core.component.FreeForm;
+import com.ks.hrms.core.component.SpinnerLayout;
+import com.ks.hrms.core.component.form.FreeForm;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TitledPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
+import javax.sound.midi.Soundbank;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -24,75 +32,76 @@ import java.util.ResourceBundle;
 public class MyController implements Initializable {
 
     @FXML
+    AnchorPane root;
+    @FXML
     JFXTabPane body;
     @FXML
-    JFXListView<String> menu;
-
-    @FXML
-    Button test;
-
-    private String caption;
-    private FreeForm freeForm;
+    Accordion menu;
 
     private Resource customResource = new ClassPathResource(CustomStyleClass.CUSTOM_UI_CSS);
+
+    private EventHandler<? super MouseEvent> menuHandler;
+
+    private ObjectProperty<AppFunctionMain> instance = new SimpleObjectProperty<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
+            menuHandler = new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    ListView<AppMenuItem> listView = (ListView) event.getSource();
+                    if (null != listView.getSelectionModel().getSelectedItem()) {
+                        AppMenuItem item = listView.getSelectionModel().getSelectedItem();
+                        System.out.println(item.getMenuName());
+                        System.out.println(item.getFunctionId());
+                        System.out.println(item.getClassPath());
+                        //
+                        instance.bind(AppFunctionFactory.generate(new SpinnerLayout(root), item));
 
-            caption = "FreFor";
+                    }
+                }
+            };
+
+            instance.addListener((observable, old, newValue) -> {
+                if (null != newValue) {
+
+                    body.getTabs().add(newValue);
+                }
+                System.out.println("change");
+            });
             body.getStylesheets().add(customResource.getURL().toExternalForm());
             body.getTabs().clear();
             body.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
 
-            freeForm = FreeForm.createFreeForm(caption, Pos.CENTER, getFormFields());
-            body.getTabs().add(freeForm);
-
-            test.setOnAction(e ->{
-                body.getTabs().add(FreeForm.createFreeForm(caption, Pos.CENTER, getFormFields()));
-            });
-
-            menu.getItems().add("test1");
-            menu.getItems().add("test2");
-            menu.getItems().add("test3");
-            menu.getItems().add("test4");
-
+            menu.getPanes().add(tenant());
+            menu.getPanes().add(rent());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private ArrayList<FormField> getFormFields() {
-        ArrayList<FormField> formFields = new ArrayList<>();
-        formFields.add(new FormField("NAME", "用户名：", FormField.ATTRIBUTE_TYPE_TEXTFIELD + FormField.putDefValue("Test")));
-        formFields.add(new FormField("PASSWORD", "密码：", FormField.ATTRIBUTE_TYPE_TEXTFIELD +FormField.ATTRIBUTE_VALUE_READONLY+ FormField.putDefValue("Test")+ FormField.ATTRIBUTE_VALUE_BREAK));
-        formFields.add(new FormField("BUTTON_OK", "test", FormField.ATTRIBUTE_TYPE_BUTTON));
+    private TitledPane tenant() {
+        TitledPane t = new TitledPane();
+        t.setText("租户管理");
+        ListView<AppMenuItem> menus = new ListView<>();
+        menus.getItems().add(new AppMenuItem("租户资料维护", "tenant01", "com.ks.hrms.core.app.TestAppFunctionMain"));
+        menus.getItems().add(new AppMenuItem("租户资料审核", "tenant02", "com.ks.hrms.core.app.TestAppFunctionMain"));
+        menus.getItems().add(new AppMenuItem("租户资料取消审核", "tenant03", "com.ks.hrms.core.app.TestAppFunctionMain"));
+        menus.setOnMouseClicked(menuHandler);
+        t.setContent(menus);
+        return t;
+    }
 
-        String itemList_sex = FormField.putItemList(new FormField.FormFieldAttribute[]{
-                new FormField.FormFieldAttribute("男", "0"),
-                new FormField.FormFieldAttribute("女", "1")
-        });
-
-        formFields.add(new FormField("SEX", "性别", FormField.ATTRIBUTE_TYPE_GROUP_RADIO + itemList_sex +FormField.putDefValue("1")+ FormField.putComponentAlignment(Pos.CENTER)));
-
-        String itemList_week = FormField.putItemList(new FormField.FormFieldAttribute[]{
-                new FormField.FormFieldAttribute("星期一", "0"),
-                new FormField.FormFieldAttribute("星期二", "1"),
-                new FormField.FormFieldAttribute("星期三", "2"),
-                new FormField.FormFieldAttribute("星期四", "4"),
-                new FormField.FormFieldAttribute("星期五", "5"),
-                new FormField.FormFieldAttribute("星期六", "6")
-        });
-
-        formFields.add(new FormField("week", "星期", FormField.ATTRIBUTE_TYPE_GROUP_CHECKBOX + itemList_week +FormField.putDefValue("1")+ FormField.putComponentAlignment(Pos.CENTER)));
-
-        String itemList_buttons = FormField.putItemList(new FormField.FormFieldAttribute[]{
-                new FormField.FormFieldAttribute("确定", "CONFIRM"),
-                new FormField.FormFieldAttribute("取消", "CANCEL")
-        });
-
-        formFields.add(new FormField("BUTTON_OK2", "", FormField.ATTRIBUTE_TYPE_GROUP_BUTTON + itemList_buttons + FormField.putComponentAlignment(Pos.CENTER)));
-
-        return formFields;
+    private TitledPane rent() {
+        TitledPane t = new TitledPane();
+        ListView<AppMenuItem> menus = new ListView<>();
+        t.setText("财务管理");
+        menus.getItems().add(new AppMenuItem("财务信息生成", "createrent", "com.ks.hrms.core.app.TestAppFunctionMain"));
+        menus.getItems().add(new AppMenuItem("凭证列表", "rentlist", "com.ks.hrms.core.app.TestAppFunctionMain"));
+        menus.getItems().add(new AppMenuItem("凭证资料维护", "rent", "com.ks.hrms.core.app.TestAppFunctionMain"));
+        menus.setOnMouseClicked(menuHandler);
+        t.setContent(menus);
+        return t;
     }
 }

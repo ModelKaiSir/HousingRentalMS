@@ -1,4 +1,4 @@
-package com.ks.hrms.core;
+package com.ks.hrms.core.configuer;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;

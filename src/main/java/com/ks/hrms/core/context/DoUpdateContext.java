@@ -1,4 +1,4 @@
-package com.ks.hrms.core;
+package com.ks.hrms.core.context;
 
 import com.ks.hrms.core.update.SystemUpdate;
 import com.ks.hrms.core.update.UpdateLog;

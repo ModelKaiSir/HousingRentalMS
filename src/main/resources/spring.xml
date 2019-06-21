@@ -11,7 +11,7 @@
 
     <util:properties id="properties" location="classpath:jdbc.properties"></util:properties>
 
-    <bean id="placeholder" class="com.ks.hrms.core.CustomPlaceholderConfigurer">
+    <bean id="placeholder" class="com.ks.hrms.core.configuer.CustomPlaceholderConfigurer">
         <property name="properties" ref="properties"></property>
         <property name="sysPath" value="#{systemProperties['user.dir']}"></property>
     </bean>
@@ -19,7 +19,7 @@
     <context:component-scan base-package="com.ks.hrms.dao"></context:component-scan>
     <context:component-scan base-package="com.ks.hrms.core.update"></context:component-scan>
     <!--appFunctionContext-->
-    <bean id="appFunctionContext" class="com.ks.hrms.core.HRMSAppFunctionContext"></bean>
+    <bean id="appFunctionContext" class="com.ks.hrms.core.context.HRMSAppFunctionContext"></bean>
     <!-- dataSource-->
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
         <property name="driverClassName" value="${sqliteDriver}"></property>
