@@ -2,6 +2,9 @@ package com.ks.hrms.core.component.bar;
 
 import com.jfoenix.controls.JFXButton;
 import com.ks.hrms.core.component.CustomStyleClass;
+import de.jensd.fx.glyphs.GlyphIcons;
+import de.jensd.fx.glyphs.GlyphsDude;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -54,7 +57,7 @@ public class CustomToolbar extends HBox implements Toolbar {
         switch (id){
             case EXIT:
                 JFXButton b = new JFXButton("退出");
-                b.setGraphic(new ImageView(CustomStyleClass.RESOURCE_BTN_IMAGE_EXIT));
+                b.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.SIGN_OUT));
                 b.setUserData(EXIT);
                 b.setOnAction(eventEventHandler);
                 setMargin(b,new Insets(0,0,0,5));

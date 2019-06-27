@@ -1,9 +1,6 @@
 package com.ks.hrms.controller;
 
-import com.jfoenix.controls.JFXListView;
-import com.jfoenix.controls.JFXProgressBar;
-import com.jfoenix.controls.JFXSpinner;
-import com.jfoenix.controls.JFXTabPane;
+import com.jfoenix.controls.*;
 import com.ks.hrms.core.app.AppFunctionFactory;
 import com.ks.hrms.core.app.AppFunctionMain;
 import com.ks.hrms.core.app.TestAppFunctionMain;
@@ -20,6 +17,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
@@ -32,53 +30,54 @@ import java.util.ResourceBundle;
 public class MyController implements Initializable {
 
     @FXML
-    AnchorPane root;
+    StackPane container;
     @FXML
     JFXTabPane body;
     @FXML
     Accordion menu;
+    @FXML
+    SplitPane point;
+    @FXML
+    JFXTextField searchField;
 
-    private Resource customResource = new ClassPathResource(CustomStyleClass.CUSTOM_UI_CSS);
-
+    private AppMenuAdapter appMenuAdapter;
     private EventHandler<? super MouseEvent> menuHandler;
-
     private ObjectProperty<AppFunctionMain> instance = new SimpleObjectProperty<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        try {
-            menuHandler = new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    ListView<AppMenuItem> listView = (ListView) event.getSource();
-                    if (null != listView.getSelectionModel().getSelectedItem()) {
-                        AppMenuItem item = listView.getSelectionModel().getSelectedItem();
-                        System.out.println(item.getMenuName());
-                        System.out.println(item.getFunctionId());
-                        System.out.println(item.getClassPath());
-                        //
-                        instance.bind(AppFunctionFactory.generate(new SpinnerLayout(root), item));
-
-                    }
-                }
-            };
-
-            instance.addListener((observable, old, newValue) -> {
-                if (null != newValue) {
-
-                    body.getTabs().add(newValue);
-                }
-                System.out.println("change");
-            });
-            body.getStylesheets().add(customResource.getURL().toExternalForm());
-            body.getTabs().clear();
-            body.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
-
+            initHandler();
+            initProperty();
             menu.getPanes().add(tenant());
             menu.getPanes().add(rent());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            appMenuAdapter = new AppMenuAdapter(menu,searchField);
+            appMenuAdapter.addFilterListener(menuHandler);
+
+            point.setDividerPosition(0,0.1f);
+            body.getStylesheets().add(CustomStyleClass.CUSTOM_UI_CSS);
+            body.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
+    }
+
+    protected void initHandler(){
+        menuHandler = new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                ListView<AppMenuItem> listView = (ListView) event.getSource();
+                if (null != listView.getSelectionModel().getSelectedItem()) {
+                    AppMenuItem item = listView.getSelectionModel().getSelectedItem();
+                    instance.bind(AppFunctionFactory.generate(new SpinnerLayout(container), item));
+                }
+            }
+        };
+    }
+
+    private void initProperty(){
+        instance.addListener((observable, old, newValue) -> {
+            if (null != newValue) {
+                body.getTabs().add(newValue);
+                body.getSelectionModel().select(newValue);
+            }
+        });
     }
 
     private TitledPane tenant() {

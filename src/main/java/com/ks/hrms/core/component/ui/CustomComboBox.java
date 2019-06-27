@@ -1,6 +1,7 @@
 package com.ks.hrms.core.component.ui;
 
 import com.jfoenix.controls.JFXComboBox;
+import com.ks.hrms.utils.Utils;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -9,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 
+import java.net.URL;
 import java.util.Map;
 
 public class CustomComboBox extends AbstractCustomParent implements AbstractCustomParent.InitValue<Label> {
@@ -56,6 +58,19 @@ public class CustomComboBox extends AbstractCustomParent implements AbstractCust
         comboBox = CustomComponentFactory.generateComBox(this);
         HBox root = CustomComponentFactory.generateHBox(lb,comboBox);
         rootProperty.set(root);
+
+        this.comboBox.valueProperty().addListener((ob,old,nv) ->{
+            this.comboBox.setItems(this.comboBox.getItems().filtered(e ->{
+                if(Utils.isEmpty(nv) || Utils.isEmpty(nv.getUserData())){
+                    return false;
+                }
+                System.out.println(e.getUserData()+":"+nv.getUserData());
+                if(e.getUserData().toString().contains(nv.getUserData().toString())){
+                    return true;
+                }
+                return false;
+            }));
+        });
     }
 
     @Override
@@ -82,4 +97,5 @@ public class CustomComboBox extends AbstractCustomParent implements AbstractCust
     public ObjectProperty<Label> initValueProperty() {
         return initValueProperty;
     }
+
 }

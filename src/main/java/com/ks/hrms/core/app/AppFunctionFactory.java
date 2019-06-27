@@ -7,6 +7,7 @@ import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.concurrent.Task;
 
 import java.lang.reflect.Constructor;
+import java.util.concurrent.TimeUnit;
 
 public class AppFunctionFactory {
 
@@ -47,15 +48,12 @@ public class AppFunctionFactory {
             Object object = clazz.newInstance();
             if (null != object) {
                 ((AppFunctionMain) object).init(context);
+                TimeUnit.SECONDS.sleep(5);
                 return (AppFunctionMain) object;
             } else {
                 return null;
             }
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (Exception e){
             e.printStackTrace();
         }
         return null;

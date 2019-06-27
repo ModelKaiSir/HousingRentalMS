@@ -61,7 +61,6 @@ public class TestAppFunctionMain extends AppFunctionMain{
 
     @Override
     public void onClickButton(int id) {
-        System.out.println("click Button "+id);
         super.onClickButton(id);
     }
 }

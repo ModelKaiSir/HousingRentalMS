@@ -38,7 +38,6 @@ public class FormFieldFactory {
 
     public void parseAttributes(FormField formField) {
 
-        System.out.println(formField.getId());
         switch (formField.getType()) {
             case FormField.ATTRIBUTE_TYPE_TEXTFIELD:
                 CustomTextField textField =  new CustomTextField(formField.getId(), formField.getCaption());

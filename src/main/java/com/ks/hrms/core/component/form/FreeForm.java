@@ -50,7 +50,6 @@ public class FreeForm extends AnchorPane {
 
         GridPane body = beforeGenerateContent();
         for (Map.Entry<String, AbstractCustomParent> fieldEntry : fieldFactory.getFieldMap().entrySet()) {
-            System.out.println("row = " + row + " col = " + col);
             AbstractCustomParent field = fieldEntry.getValue();
             Parent component = field.value();
             body.add(component, col, row);

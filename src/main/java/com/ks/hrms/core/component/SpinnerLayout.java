@@ -7,10 +7,10 @@ import javafx.scene.paint.Color;
 
 public class SpinnerLayout extends BorderPane {
 
-    private AnchorPane root;
+    private StackPane root;
     private JFXSpinner spinner = new JFXSpinner();
 
-    public SpinnerLayout(AnchorPane root) {
+    public SpinnerLayout(StackPane root) {
         this.root = root;
         BackgroundFill fill = new BackgroundFill(Color.web("E9E9E9",0.6),CornerRadii.EMPTY,Insets.EMPTY);
         Background background = new Background(fill);

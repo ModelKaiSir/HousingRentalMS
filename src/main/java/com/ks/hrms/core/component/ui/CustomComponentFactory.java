@@ -32,15 +32,15 @@ public class CustomComponentFactory {
     public static final StringConverter<Label> defComboBoxConverter = new StringConverter<Label>() {
         @Override
         public String toString(Label object) {
+
             return null != object ? object.getText() : " ";
         }
 
         @Override
         public Label fromString(String string) {
-            System.out.println(string);
             if (null != string) {
                 Label l = new Label(string);
-                l.setUserData(l);
+                l.setUserData(string);
                 return l;
             } else {
                 return null;
@@ -112,7 +112,7 @@ public class CustomComponentFactory {
 
     public static JFXComboBox<Label> generateComBox(CustomComboBox comBoBox) {
         JFXComboBox<Label> box = new JFXComboBox<>();
-
+        box.setEditable(true);
         box.setCellFactory(param -> {
 
             ComboBoxListCell<Label> listCell = new ComboBoxListCell<Label>();

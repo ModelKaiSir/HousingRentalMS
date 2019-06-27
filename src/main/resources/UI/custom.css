@@ -139,3 +139,12 @@ animated-option-sub-cl{
     -fx-border-color: #03B8CF;
     -fx-shape: inherit;
 }
+
+.jfx-decorator-buttons-container{
+    -fx-background-color: #3280FC;
+}
+
+.resize-border{
+    -fx-border-color: #3280FC;
+    -fx-border-width: 2px;
+}

@@ -34,7 +34,6 @@ public class AppFunctionMain extends Tab implements ToolbarControl {
     }
 
     public void init(HRMSAppFunctionContext context){
-
     }
 
     public void setCaption(String caption) {
