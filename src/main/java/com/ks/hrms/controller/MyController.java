@@ -8,6 +8,7 @@ import com.ks.hrms.core.component.CustomStyleClass;
 import com.ks.hrms.core.component.FormField;
 import com.ks.hrms.core.component.SpinnerLayout;
 import com.ks.hrms.core.component.form.FreeForm;
+import com.ks.hrms.core.context.HRMSAppFunctionContext;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.EventHandler;
@@ -42,7 +43,6 @@ public class MyController implements Initializable {
 
     private AppMenuAdapter appMenuAdapter;
     private EventHandler<? super MouseEvent> menuHandler;
-    private ObjectProperty<AppFunctionMain> instance = new SimpleObjectProperty<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -65,15 +65,15 @@ public class MyController implements Initializable {
                 ListView<AppMenuItem> listView = (ListView) event.getSource();
                 if (null != listView.getSelectionModel().getSelectedItem()) {
                     AppMenuItem item = listView.getSelectionModel().getSelectedItem();
-                    instance.bind(AppFunctionFactory.generate(new SpinnerLayout(container), item));
+                    HRMSAppFunctionContext.getInstance().localAppProperty().bind(AppFunctionFactory.generate(new SpinnerLayout(container), item));
                 }
             }
         };
     }
 
     private void initProperty(){
-        instance.addListener((observable, old, newValue) -> {
-            if (null != newValue) {
+        HRMSAppFunctionContext.getInstance().localAppProperty().addListener((observable, old, newValue) -> {
+            if (null != newValue || !old.getId().equals(newValue.getId())) {
                 body.getTabs().add(newValue);
                 body.getSelectionModel().select(newValue);
             }

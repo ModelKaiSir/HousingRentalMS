@@ -1,5 +1,9 @@
 package com.ks.hrms.core.component;
 
+import com.jfoenix.controls.cells.editors.TextFieldEditorBuilder;
+import com.jfoenix.controls.cells.editors.base.EditorNodeBuilder;
+import com.jfoenix.controls.cells.editors.base.GenericEditableTreeTableCell;
+import com.jfoenix.controls.cells.editors.base.JFXTreeTableCell;
 import com.ks.hrms.core.component.ui.*;
 import com.ks.hrms.utils.Utils;
 
@@ -14,8 +18,12 @@ public class FormFieldFactory {
     private ArrayList<FormField> formFields;
     private LinkedHashMap<String, AbstractCustomParent> fieldMap;
 
-    public void addFormFields(ArrayList<FormField> formFields) {
+    public FormFieldFactory addFormFields(ArrayList<FormField> formFields) {
         this.formFields = formFields;
+        return this;
+    }
+
+    public void init() {
         fieldMap = new LinkedHashMap<>();
         for (FormField f : this.formFields) {
             parseAttributes(f);
@@ -37,58 +45,88 @@ public class FormFieldFactory {
     }
 
     public void parseAttributes(FormField formField) {
+        fieldMap.put(formField.getId(), parseAttribute(formField));
+    }
+
+    public AbstractCustomParent parseAttribute(FormField formField) {
 
         switch (formField.getType()) {
             case FormField.ATTRIBUTE_TYPE_TEXTFIELD:
-                CustomTextField textField =  new CustomTextField(formField.getId(), formField.getCaption());
-                textField = new CustomParentAdapter<CustomTextField>(textField ,obj ->{
+                CustomTextField textField = new CustomTextField(formField.getId(), formField.getCaption());
+                textField = new CustomParentAdapter<CustomTextField>(textField, obj -> {
                     parseField(formField, obj);
                 }).fine();
-                fieldMap.put(formField.getId(), textField);
-                break;
+                return textField;
+
+            case FormField.ATTRIBUTE_TYPE_TEXTAREA:
+                CustomTextArea area = new CustomTextArea(formField.getId(), formField.getCaption());
+                area = new CustomParentAdapter<CustomTextArea>(area, obj -> {
+                    parseField(formField, obj);
+                }).fine();
+                return area;
+
+            case FormField.ATTRIBUTE_TYPE_DATE:
+                CustomDatePicker datePicker = new CustomDatePicker(formField.getId(), formField.getCaption(), CustomDatePicker.TYPE_DATE);
+                datePicker = new CustomParentAdapter<CustomDatePicker>(datePicker, obj -> {
+                    parseField(formField, obj);
+                }).fine();
+                return datePicker;
+
+            case FormField.ATTRIBUTE_TYPE_DATETIME:
+                datePicker = new CustomDatePicker(formField.getId(), formField.getCaption(), CustomDatePicker.TYPE_DATE_TIME);
+                datePicker = new CustomParentAdapter<CustomDatePicker>(datePicker, obj -> {
+                    parseField(formField, obj);
+                }).fine();
+                return datePicker;
+
             case FormField.ATTRIBUTE_TYPE_BUTTON:
                 CustomButton button = new CustomButton(formField.getId(), formField.getCaption());
-                button = new CustomParentAdapter<CustomButton>(button,obj ->{
+                button = new CustomParentAdapter<CustomButton>(button, obj -> {
                     parseField(formField, obj);
                 }).fine();
+                return button;
 
-                fieldMap.put(formField.getId(), button);
-                break;
             case FormField.GROUP_BUTTON:
                 CustomButtonGroup btnGroup = new CustomButtonGroup(formField.getId());
-                btnGroup = new CustomParentAdapter<CustomButtonGroup>(btnGroup,obj ->{
+                btnGroup = new CustomParentAdapter<CustomButtonGroup>(btnGroup, obj -> {
                     obj.addButtons(formField.getItemList());
                     parseField(formField, obj);
                 }).fine();
-                fieldMap.put(formField.getId(), btnGroup);
-                break;
+                return btnGroup;
+
             case FormField.GROUP_RADIO_BUTTON:
                 CustomRadioBox radGroup = new CustomRadioBox(formField.getId(), formField.getCaption(), Utils.getValue(String.class, formField.getDefValue()));
-                radGroup = new CustomParentAdapter<CustomRadioBox>(radGroup,obj ->{
+                radGroup = new CustomParentAdapter<CustomRadioBox>(radGroup, obj -> {
                     obj.addSelect(formField.getItemList());
                     parseField(formField, obj);
                 }).fine();
+                return radGroup;
 
-                fieldMap.put(formField.getId(), radGroup);
-                break;
             case FormField.GROUP_CHECKBOX:
                 CustomCheckBox checkGroup = new CustomCheckBox(formField.getId(), formField.getCaption(), Utils.getValue(String.class, formField.getDefValue()));
-                checkGroup = new CustomParentAdapter<CustomCheckBox>(checkGroup,obj ->{
+                checkGroup = new CustomParentAdapter<CustomCheckBox>(checkGroup, obj -> {
                     obj.addSelect(formField.getItemList());
                     parseField(formField, obj);
                 }).fine();
-                fieldMap.put(formField.getId(), checkGroup);
-                break;
+                return checkGroup;
+
             case FormField.GROUP_COMBOBOX:
                 CustomComboBox comBoBox = new CustomComboBox(formField.getId(), formField.getCaption(), Utils.getValue(String.class, formField.getDefValue()));
-                comBoBox = new CustomParentAdapter<CustomComboBox>(comBoBox, obj ->{
+                comBoBox = new CustomParentAdapter<CustomComboBox>(comBoBox, obj -> {
                     CustomComponentFactory.reloadComBoBox(obj, formField.getItemList());
                     parseField(formField, obj);
                 }).fine();
-                fieldMap.put(formField.getId(), comBoBox);
-                break;
+                return comBoBox;
+
             default:
-                break;
+                return null;
+        }
+    }
+
+    public JFXTreeTableCell generateFieldBuilder(FormField formField) {
+        switch (formField.getType()) {
+            default:
+                return new GenericEditableTreeTableCell(new TextFieldEditorBuilder());
         }
     }
 
@@ -105,7 +143,7 @@ public class FormFieldFactory {
 
         private T t;
 
-        private CustomParentAdapter(T t,DoCustomParent<T> toDo) {
+        private CustomParentAdapter(T t, DoCustomParent<T> toDo) {
             this.t = t;
             this.t.init();
             toDo.toDo(t);

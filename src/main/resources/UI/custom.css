@@ -139,12 +139,31 @@ animated-option-sub-cl{
     -fx-border-color: #03B8CF;
     -fx-shape: inherit;
 }
-
+.custom_tool_bar{
+    -fx-background-color: #4e7ca1;
+}
+/* decorator */
 .jfx-decorator-buttons-container{
-    -fx-background-color: #3280FC;
+    -fx-background-color: #2474b5;
 }
 
 .resize-border{
-    -fx-border-color: #3280FC;
+    -fx-border-color: #2474b5;
     -fx-border-width: 2px;
+}
+/* jfx tab pane custom */
+.jfx-tab-pane{
+    -fx-background-color: #eef7f2;
+}
+
+.jfx-tab-pane .tab-header-background {
+    -fx-background-color: #2474b5;
+}
+
+.jfx-tab-pane .tab-header-area .tab-down-button {
+    -fx-background-color: WHITE;
+    -fx-min-width: 0.8em;
+    -fx-max-width: 0.8em;
+    -fx-min-height: 0.8em;
+    -fx-max-height: 0.8em;
 }

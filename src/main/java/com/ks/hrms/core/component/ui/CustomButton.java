@@ -5,9 +5,9 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Parent;
 
-public class CustomButton extends AbstractCustomParent {
+public class CustomButton extends AbstractCustomParent<String> {
 
-    private SimpleObjectProperty<JFXButton> valueProperty = new SimpleObjectProperty<>();
+    private SimpleObjectProperty<JFXButton> contentProperty = new SimpleObjectProperty<>();
 
     public CustomButton(String fieldId,String caption) {
         super(fieldId,caption);
@@ -19,24 +19,34 @@ public class CustomButton extends AbstractCustomParent {
 
     @Override
     public void init() {
-        valueProperty.set(CustomComponentFactory.generateButton(""));
-        valueProperty.get().textProperty().bind(captionProperty());
-        valueProperty.get().disableProperty().bind(editableProperty());
+        contentProperty.set(CustomComponentFactory.generateButton(""));
+        contentProperty.get().textProperty().bind(captionProperty());
+        contentProperty.get().disableProperty().bind(editableProperty());
     }
 
     @Override
-    public Parent value() {
-        return valueProperty.get();
+    public Parent content() {
+        return contentProperty.get();
     }
 
     @Override
-    public ObjectProperty<JFXButton> valueProperty() {
-        return valueProperty;
+    public ObjectProperty<JFXButton> contentProperty() {
+        return contentProperty;
     }
 
     @Override
     public void afterInit() {
 
+    }
+
+    @Override
+    public String getValue() {
+        return null;
+    }
+
+    @Override
+    public ObjectProperty<String> valueProperty() {
+        return null;
     }
 }
 

@@ -2,6 +2,7 @@ package com.ks.hrms.core.app;
 
 import com.ks.hrms.core.component.FormField;
 import com.ks.hrms.core.component.form.FreeForm;
+import com.ks.hrms.core.context.FunctionParamter;
 import com.ks.hrms.core.context.HRMSAppFunctionContext;
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -13,8 +14,8 @@ public class TestAppFunctionMain extends AppFunctionMain{
     private FreeForm freeForm;
 
     @Override
-    public void init(HRMSAppFunctionContext context) {
-        super.init(context);
+    public void init(HRMSAppFunctionContext context, FunctionParamter functionParamter) {
+        super.init(context,functionParamter);
         generateForm();
         setCaption("测试维护功能");
     }
@@ -55,6 +56,9 @@ public class TestAppFunctionMain extends AppFunctionMain{
 
         formFields.add(new FormField("BUTTON_OK2", "", FormField.BUTTONS + itemList_buttons + FormField.putComponentAlignment(Pos.CENTER)));
         formFields.add(new FormField("XF_WEEKS", "选择日期", FormField.COMBOBOX + itemList_week + FormField.putComponentAlignment(Pos.CENTER)));
+        formFields.add(new FormField("XF_DATE", "选择日期", FormField.DATE + FormField.putComponentAlignment(Pos.CENTER)));
+        formFields.add(new FormField("XF_DATE2", "选择日期2", FormField.DATETIME + FormField.putComponentAlignment(Pos.CENTER)));
+        formFields.add(new FormField("XF_CONTENT", "备注", FormField.TEXTAREA+ FormField.putComponentAlignment(Pos.CENTER)));
 
         return formFields;
     }

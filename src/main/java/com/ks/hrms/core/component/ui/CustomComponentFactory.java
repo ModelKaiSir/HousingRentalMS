@@ -76,6 +76,19 @@ public class CustomComponentFactory {
         return textField;
     }
 
+    public static JFXTextArea generateTextAreaField() {
+        JFXTextArea textArea = new JFXTextArea();
+        textArea.setPrefRowCount(10);
+        textArea.setPrefColumnCount(8);
+        textArea.setWrapText(true);
+        return textArea;
+    }
+
+    public static JFXPasswordField generatePasswordField() {
+        JFXPasswordField passwordField = new JFXPasswordField();
+        return passwordField;
+    }
+
     public static JFXCheckBox generateCheckBox(String key, String value, Object defValue) {
         JFXCheckBox box = generateCheckBox(key, value);
         if (null != defValue) {
@@ -150,5 +163,13 @@ public class CustomComponentFactory {
         comBoBox.reset();
     }
 
+    public static JFXDatePicker generateDatePicker(){
+        JFXDatePicker datePicker = new JFXDatePicker();
+        return datePicker;
+    }
 
+    public static JFXTimePicker generateDateTimePicker(){
+        JFXTimePicker timePicker = new JFXTimePicker();
+        return timePicker;
+    }
 }

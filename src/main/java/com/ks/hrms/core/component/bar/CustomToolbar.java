@@ -25,7 +25,7 @@ public class CustomToolbar extends HBox implements Toolbar {
 
     public CustomToolbar(final ToolbarControl control) {
         getStylesheets().add(CustomStyleClass.CUSTOM_UI_CSS);
-        getStyleClass().add(CustomStyleClass.CUSTOM_BTN_COLOR_WARNING);
+        getStyleClass().add(CustomStyleClass.CUSTOM_TOOL_BAR);
         setPadding(new Insets(5,5,5,5));
         setAlignment(Pos.CENTER_RIGHT);
         eventEventHandler = new EventHandler<ActionEvent>() {

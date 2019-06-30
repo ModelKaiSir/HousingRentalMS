@@ -47,7 +47,7 @@ public class AppFunctionFactory {
             HRMSAppFunctionContext context = HRMSAppFunctionContext.getInstance();
             Object object = clazz.newInstance();
             if (null != object) {
-                ((AppFunctionMain) object).init(context);
+                ((AppFunctionMain) object).init(context,null);
                 TimeUnit.SECONDS.sleep(5);
                 return (AppFunctionMain) object;
             } else {

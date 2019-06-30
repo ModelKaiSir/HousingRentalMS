@@ -3,6 +3,7 @@ package com.ks.hrms.core.app;
 import com.ks.hrms.core.component.bar.CustomToolbar;
 import com.ks.hrms.core.component.bar.Toolbar;
 import com.ks.hrms.core.component.bar.ToolbarControl;
+import com.ks.hrms.core.context.FunctionParamter;
 import com.ks.hrms.core.context.HRMSAppFunctionContext;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.Event;
@@ -33,7 +34,7 @@ public class AppFunctionMain extends Tab implements ToolbarControl {
         });
     }
 
-    public void init(HRMSAppFunctionContext context){
+    public void init(HRMSAppFunctionContext context, FunctionParamter functionParamter){
     }
 
     public void setCaption(String caption) {

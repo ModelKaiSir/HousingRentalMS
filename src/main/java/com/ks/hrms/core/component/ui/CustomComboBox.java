@@ -10,7 +10,6 @@ import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 
-import java.net.URL;
 import java.util.Map;
 
 public class CustomComboBox extends AbstractCustomParent implements AbstractCustomParent.InitValue<Label> {
@@ -19,7 +18,7 @@ public class CustomComboBox extends AbstractCustomParent implements AbstractCust
     private JFXComboBox<Label> comboBox;
     private Label lb;
 
-    private SimpleObjectProperty<HBox> rootProperty = new SimpleObjectProperty<>();
+    private SimpleObjectProperty<HBox> contentProperty = new SimpleObjectProperty<>();
     private SimpleObjectProperty<Label> initValueProperty = new SimpleObjectProperty<>();
 
     public CustomComboBox(String id, String caption) {
@@ -57,7 +56,7 @@ public class CustomComboBox extends AbstractCustomParent implements AbstractCust
         dataMap = FXCollections.observableHashMap();
         comboBox = CustomComponentFactory.generateComBox(this);
         HBox root = CustomComponentFactory.generateHBox(lb,comboBox);
-        rootProperty.set(root);
+        contentProperty.set(root);
 
         this.comboBox.valueProperty().addListener((ob,old,nv) ->{
             this.comboBox.setItems(this.comboBox.getItems().filtered(e ->{
@@ -79,13 +78,13 @@ public class CustomComboBox extends AbstractCustomParent implements AbstractCust
     }
 
     @Override
-    public Parent value() {
-        return rootProperty.get();
+    public Parent content() {
+        return contentProperty.get();
     }
 
     @Override
-    public ObjectProperty<? extends Parent> valueProperty() {
-        return rootProperty;
+    public ObjectProperty<? extends Parent> contentProperty() {
+        return contentProperty;
     }
 
     @Override
@@ -98,4 +97,13 @@ public class CustomComboBox extends AbstractCustomParent implements AbstractCust
         return initValueProperty;
     }
 
+    @Override
+    public Object getValue() {
+        return null;
+    }
+
+    @Override
+    public ObjectProperty valueProperty() {
+        return null;
+    }
 }

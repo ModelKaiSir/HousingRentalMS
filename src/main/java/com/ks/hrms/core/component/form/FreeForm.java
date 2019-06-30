@@ -6,7 +6,6 @@ import com.ks.hrms.core.component.FormFieldFactory;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
-import javafx.scene.control.Tab;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -28,8 +27,8 @@ public class FreeForm extends AnchorPane {
     }
 
     private FreeForm(Pos pos,ArrayList<FormField> formFields) {
-        fieldFactory = new FormFieldFactory();
-        fieldFactory.addFormFields(formFields);
+        fieldFactory = new FormFieldFactory().addFormFields(formFields);
+        fieldFactory.init();
         this.pos = pos;
         generateContent();
     }
@@ -51,7 +50,7 @@ public class FreeForm extends AnchorPane {
         GridPane body = beforeGenerateContent();
         for (Map.Entry<String, AbstractCustomParent> fieldEntry : fieldFactory.getFieldMap().entrySet()) {
             AbstractCustomParent field = fieldEntry.getValue();
-            Parent component = field.value();
+            Parent component = field.content();
             body.add(component, col, row);
 
             if (null != field.getPos()) {

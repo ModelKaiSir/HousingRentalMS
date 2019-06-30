@@ -11,7 +11,7 @@ import javafx.scene.Parent;
  * HRMS系统中的控件
  * @author QiuKai
  */
-public interface CustomParent {
+public interface CustomParent<T> {
 
     /**
      * 组件的ID
@@ -48,8 +48,11 @@ public interface CustomParent {
      * 返回自定义组件
      * @return
      */
-    Parent value();
-    ObjectProperty<? extends Parent> valueProperty();
+    Parent content();
+    ObjectProperty<? extends Parent> contentProperty();
+
+    T getValue();
+    ObjectProperty<T> valueProperty();
 
     /**
      * 对齐属性

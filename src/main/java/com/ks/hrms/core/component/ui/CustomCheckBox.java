@@ -1,5 +1,6 @@
 package com.ks.hrms.core.component.ui;
 
+import com.jfoenix.controls.JFXCheckBox;
 import com.ks.hrms.core.component.FormField;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -15,7 +16,7 @@ public class CustomCheckBox extends AbstractCustomParent implements AbstractCust
 
     private ArrayList<CheckBox> checkBoxes;
     private Label lb;
-    private SimpleObjectProperty<HBox> rootProperty = new SimpleObjectProperty<>();
+    private SimpleObjectProperty<HBox> contentProperty = new SimpleObjectProperty<>();
     private SimpleObjectProperty<String> initValueProperty = new SimpleObjectProperty<>();
 
     public CustomCheckBox(String fieldId, String caption) {
@@ -30,8 +31,8 @@ public class CustomCheckBox extends AbstractCustomParent implements AbstractCust
 
     public void addSelect(List<FormField.FormFieldAttribute> values) {
         for (FormField.FormFieldAttribute item : values) {
-            CheckBox box = CustomComponentFactory.generateCheckBox(item.getKey(),item.getValue(),initValueProperty.getValue());
-            rootProperty.get().getChildren().add(box);
+            JFXCheckBox box = CustomComponentFactory.generateCheckBox(item.getKey(),item.getValue(),initValueProperty.getValue());
+            contentProperty.get().getChildren().add(box);
             checkBoxes.add(box);
         }
     }
@@ -41,7 +42,7 @@ public class CustomCheckBox extends AbstractCustomParent implements AbstractCust
         lb = CustomComponentFactory.generateCaptionLb();
         lb.textProperty().bind(captionProperty());
         HBox root = CustomComponentFactory.generateHBox(lb);
-        rootProperty.set(root);
+        contentProperty.set(root);
         checkBoxes = new ArrayList<>();
         initValueProperty.addListener((observableValue,oldValue,newValue) ->{
             checkBoxes.forEach(i ->{
@@ -59,13 +60,13 @@ public class CustomCheckBox extends AbstractCustomParent implements AbstractCust
     }
 
     @Override
-    public Parent value() {
-        return rootProperty.get();
+    public Parent content() {
+        return contentProperty.get();
     }
 
     @Override
-    public ObjectProperty<? extends Parent> valueProperty() {
-        return rootProperty;
+    public ObjectProperty<? extends Parent> contentProperty() {
+        return contentProperty;
     }
 
     @Override
@@ -76,5 +77,15 @@ public class CustomCheckBox extends AbstractCustomParent implements AbstractCust
     @Override
     public ObjectProperty<String> initValueProperty() {
         return initValueProperty;
+    }
+
+    @Override
+    public Object getValue() {
+        return null;
+    }
+
+    @Override
+    public ObjectProperty valueProperty() {
+        return null;
     }
 }

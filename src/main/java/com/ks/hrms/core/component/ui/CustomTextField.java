@@ -13,9 +13,10 @@ public class CustomTextField extends AbstractCustomParent implements AbstractCus
     private Label lb;
     private JFXTextField input;
 
-    private SimpleObjectProperty<HBox> rootProperty = new SimpleObjectProperty<>();
+    private SimpleObjectProperty<HBox> contentProperty = new SimpleObjectProperty<>();
     private RequiredFieldValidator validator;
     private SimpleObjectProperty<String> initValueProperty = new SimpleObjectProperty<String>();
+    private SimpleObjectProperty<String> valueProperty = new SimpleObjectProperty<String>();
 
     public CustomTextField(String id,String caption,String initValue) {
         super.setFieldId(id);
@@ -34,11 +35,20 @@ public class CustomTextField extends AbstractCustomParent implements AbstractCus
         lb.textProperty().bind(captionProperty());
         input = CustomComponentFactory.generateTextField();
         input.editableProperty().bind(editableProperty());
+
+        input.textProperty().addListener((obs,old,nv) -> {
+            valueProperty.set(nv);
+        });
+
+        valueProperty.addListener((obs,old,nv) -> {
+            input.setText(nv);
+        });
+
         HBox root = CustomComponentFactory.generateHBox(lb,input);
 
         validator = new RequiredFieldValidator();
         validator.setMessage("不能为空！");
-        rootProperty.set(root);
+        contentProperty.set(root);
     }
 
     @Override
@@ -58,13 +68,13 @@ public class CustomTextField extends AbstractCustomParent implements AbstractCus
     }
 
     @Override
-    public Parent value() {
-        return rootProperty.get();
+    public Parent content() {
+        return contentProperty.get();
     }
 
     @Override
-    public ObjectProperty<? extends Parent> valueProperty() {
-        return rootProperty;
+    public ObjectProperty<? extends Parent> contentProperty() {
+        return contentProperty;
     }
 
     @Override
@@ -72,5 +82,15 @@ public class CustomTextField extends AbstractCustomParent implements AbstractCus
         if(isRequired()){
             input.setValidators(validator);
         }
+    }
+
+    @Override
+    public Object getValue() {
+        return valueProperty.get();
+    }
+
+    @Override
+    public ObjectProperty valueProperty() {
+        return valueProperty;
     }
 }

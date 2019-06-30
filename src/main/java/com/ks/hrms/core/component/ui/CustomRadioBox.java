@@ -68,12 +68,12 @@ public class CustomRadioBox extends AbstractCustomParent implements AbstractCust
     }
 
     @Override
-    public Parent value() {
+    public Parent content() {
         return rootProperty.get();
     }
 
     @Override
-    public ObjectProperty<? extends Parent> valueProperty() {
+    public ObjectProperty<? extends Parent> contentProperty() {
         return rootProperty;
     }
 
@@ -85,5 +85,15 @@ public class CustomRadioBox extends AbstractCustomParent implements AbstractCust
     @Override
     public ObjectProperty<String> initValueProperty() {
         return initValueProperty;
+    }
+
+    @Override
+    public Object getValue() {
+        return null;
+    }
+
+    @Override
+    public ObjectProperty valueProperty() {
+        return null;
     }
 }

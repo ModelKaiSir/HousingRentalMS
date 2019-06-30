@@ -61,6 +61,13 @@ public class FormField {
     public static final String GROUP_COMBOBOX = "GROUP_COMBOBOX";
     public static final String COMBOBOX = "TYPE=GROUP_COMBOBOX;";
 
+    public static final String DATE = "TYPE=DATE;";
+    public static final String ATTRIBUTE_TYPE_DATE = "DATE";
+    public static final String DATETIME = "TYPE=DATETIME;";
+    public static final String ATTRIBUTE_TYPE_DATETIME = "DATETIME";
+    public static final String TEXTAREA = "TYPE=TEXTAREA;";
+    public static final String ATTRIBUTE_TYPE_TEXTAREA = "TEXTAREA";
+
     public static final String BREAK = "BREAK=TRUE;";
     public static final String READONLY = "READONLY=TRUE;";
     public static final String REQUIRED = "REQUIRED=TRUE;";

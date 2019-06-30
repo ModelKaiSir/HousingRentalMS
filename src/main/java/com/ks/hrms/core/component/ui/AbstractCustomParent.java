@@ -1,5 +1,6 @@
 package com.ks.hrms.core.component.ui;
 
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import javafx.beans.property.*;
 import javafx.geometry.Pos;
 
@@ -7,7 +8,7 @@ import javafx.geometry.Pos;
  * 自定义
  * @author QiuKai
  */
-public abstract class AbstractCustomParent implements CustomParent{
+public abstract class AbstractCustomParent<T> extends RecursiveTreeObject<T> implements CustomParent<T>{
 
     private SimpleStringProperty id = new SimpleStringProperty();
     private SimpleStringProperty caption = new SimpleStringProperty();
@@ -16,7 +17,6 @@ public abstract class AbstractCustomParent implements CustomParent{
     private SimpleBooleanProperty required = new SimpleBooleanProperty(false);
     private SimpleDoubleProperty width = new SimpleDoubleProperty();
     private SimpleDoubleProperty height = new SimpleDoubleProperty();
-
     private SimpleObjectProperty<Pos> pos = new SimpleObjectProperty<>();
 
     /**

@@ -13,7 +13,7 @@ import java.util.List;
 public class CustomButtonGroup extends AbstractCustomParent {
 
     private ArrayList<Button> buttons;
-    private SimpleObjectProperty<HBox> rootProperty = new SimpleObjectProperty<>();
+    private SimpleObjectProperty<HBox> contentProperty = new SimpleObjectProperty<>();
 
     public CustomButtonGroup(String fieldId) {
         super(fieldId,null);
@@ -26,7 +26,7 @@ public class CustomButtonGroup extends AbstractCustomParent {
             Button button = CustomComponentFactory.generateButton(v.getKey());
             button.setId(v.getValue());
             buttons.add(button);
-            rootProperty.get().getChildren().add(button);
+            contentProperty.get().getChildren().add(button);
         }
     }
 
@@ -34,7 +34,7 @@ public class CustomButtonGroup extends AbstractCustomParent {
     public void init() {
         HBox root = CustomComponentFactory.generateHBox();
         root.alignmentProperty().bind(posProperty());
-        rootProperty.set(root);
+        contentProperty.set(root);
         buttons = new ArrayList<>();
     }
 
@@ -44,12 +44,22 @@ public class CustomButtonGroup extends AbstractCustomParent {
     }
 
     @Override
-    public Parent value() {
-        return rootProperty.get();
+    public Parent content() {
+        return contentProperty.get();
     }
 
     @Override
-    public ObjectProperty<? extends Parent> valueProperty() {
-        return rootProperty;
+    public ObjectProperty<? extends Parent> contentProperty() {
+        return contentProperty;
+    }
+
+    @Override
+    public Object getValue() {
+        return null;
+    }
+
+    @Override
+    public ObjectProperty valueProperty() {
+        return null;
     }
 }
