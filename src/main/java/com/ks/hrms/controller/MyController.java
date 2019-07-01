@@ -55,6 +55,7 @@ public class MyController implements Initializable {
 
             point.setDividerPosition(0,0.1f);
             body.getStylesheets().add(CustomStyleClass.CUSTOM_UI_CSS);
+            body.getStyleClass().add(CustomStyleClass.HRMS_ROOT_BACKGROUND);
             body.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
     }
 
@@ -73,7 +74,7 @@ public class MyController implements Initializable {
 
     private void initProperty(){
         HRMSAppFunctionContext.getInstance().localAppProperty().addListener((observable, old, newValue) -> {
-            if (null != newValue || !old.getId().equals(newValue.getId())) {
+            if (null != newValue) {
                 body.getTabs().add(newValue);
                 body.getSelectionModel().select(newValue);
             }
@@ -85,7 +86,7 @@ public class MyController implements Initializable {
         t.setText("租户管理");
         ListView<AppMenuItem> menus = new ListView<>();
         menus.getItems().add(new AppMenuItem("租户资料维护", "tenant01", "com.ks.hrms.core.app.TestAppFunctionMain"));
-        menus.getItems().add(new AppMenuItem("租户资料审核", "tenant02", "com.ks.hrms.core.app.TestAppFunctionMain"));
+        menus.getItems().add(new AppMenuItem("租户资料审核", "tenant02", "com.ks.hrms.core.app.TestAppFunctionMain2"));
         menus.getItems().add(new AppMenuItem("租户资料取消审核", "tenant03", "com.ks.hrms.core.app.TestAppFunctionMain"));
         menus.setOnMouseClicked(menuHandler);
         t.setContent(menus);

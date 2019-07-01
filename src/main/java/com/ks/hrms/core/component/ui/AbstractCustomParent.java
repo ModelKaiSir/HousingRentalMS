@@ -8,7 +8,7 @@ import javafx.geometry.Pos;
  * 自定义
  * @author QiuKai
  */
-public abstract class AbstractCustomParent<T> extends RecursiveTreeObject<T> implements CustomParent<T>{
+public abstract class AbstractCustomParent<T> implements CustomParent<T>{
 
     private SimpleStringProperty id = new SimpleStringProperty();
     private SimpleStringProperty caption = new SimpleStringProperty();

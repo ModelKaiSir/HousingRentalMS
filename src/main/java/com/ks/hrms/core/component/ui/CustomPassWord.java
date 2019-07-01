@@ -1,5 +1,6 @@
 package com.ks.hrms.core.component.ui;
 
+import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RequiredFieldValidator;
 import javafx.beans.property.ObjectProperty;
@@ -7,33 +8,32 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import org.omg.PortableInterceptor.INACTIVE;
 
-public class CustomTextField extends AbstractCustomParent implements AbstractCustomParent.InitValue<String> {
+public class CustomPassWord extends AbstractCustomParent implements AbstractCustomParent.InitValue<String> {
 
     private Label lb;
-    private JFXTextField input;
+    private JFXPasswordField input;
 
     private SimpleObjectProperty<HBox> contentProperty = new SimpleObjectProperty<>();
     private RequiredFieldValidator validator;
     private SimpleObjectProperty<String> initValueProperty = new SimpleObjectProperty<String>();
     private SimpleObjectProperty<String> valueProperty = new SimpleObjectProperty<String>();
 
-    public CustomTextField(String id,String caption,String initValue) {
+    public CustomPassWord(String id,String caption,String initValue) {
         super.setFieldId(id);
         super.setCaption(caption);
         initValueProperty.set(initValue);
         init();
     }
 
-    public CustomTextField(String id, String caption) {
+    public CustomPassWord(String id, String caption) {
         this(id,caption,null);
     }
 
     @Override
     public void init(){
         lb = CustomComponentFactory.generateCaptionLb();
-        input = CustomComponentFactory.generateTextField();
+        input = CustomComponentFactory.generatePasswordField();
 
         lb.textProperty().bind(captionProperty());
         input.prefWidthProperty().bind(widthProperty());

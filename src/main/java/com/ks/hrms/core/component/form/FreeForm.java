@@ -81,7 +81,7 @@ public class FreeForm extends AnchorPane {
         return new FreeForm(formFields);
     }
 
-    public static FreeForm createFreeForm(String caption, Pos pos, ArrayList<FormField> formFields) {
+    public static FreeForm createFreeForm(Pos pos, ArrayList<FormField> formFields) {
         return new FreeForm(pos, formFields);
     }
 }

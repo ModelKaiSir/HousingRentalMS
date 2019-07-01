@@ -20,6 +20,8 @@ public class CustomButton extends AbstractCustomParent<String> {
     @Override
     public void init() {
         contentProperty.set(CustomComponentFactory.generateButton(""));
+        contentProperty.get().prefHeightProperty().bind(heightProperty());
+        contentProperty.get().prefWidthProperty().bind(widthProperty());
         contentProperty.get().textProperty().bind(captionProperty());
         contentProperty.get().disableProperty().bind(editableProperty());
     }

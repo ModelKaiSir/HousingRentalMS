@@ -28,6 +28,11 @@ public class CustomComponentFactory {
     public static final double LB_MIN_WIDTH = 60;
     public static final double LB_MAX_WIDTH = 100;
 
+    public static final double BUTTON_MIN_WIDTH = 40;
+    public static final double COMBO_BOX_MIN_WIDTH = 150;
+    public static final double TEXTAREA_MIN_WIDTH = 230;
+    public static final double TEXTAREA_MIN_HEIGHT = 90;
+
 
     public static final StringConverter<Label> defComboBoxConverter = new StringConverter<Label>() {
         @Override
@@ -53,7 +58,7 @@ public class CustomComponentFactory {
         Label lb = new Label();
         lb.setMinWidth(LB_MIN_WIDTH);
         lb.setMaxWidth(LB_MAX_WIDTH);
-        lb.setAlignment(Pos.CENTER);
+        lb.setAlignment(Pos.CENTER_RIGHT);
         return lb;
     }
 
@@ -61,12 +66,14 @@ public class CustomComponentFactory {
         HBox root = new HBox();
         root.getChildren().addAll(childes);
         root.setSpacing(DEF_SPACE);
+        root.getStylesheets().add(CustomStyleClass.CUSTOM_UI_CSS);
         return root;
     }
 
     public static JFXButton generateButton(String caption) {
         JFXButton button = new JFXButton(caption);
         button.setButtonType(JFXButton.ButtonType.RAISED);
+        button.setMinWidth(BUTTON_MIN_WIDTH);
         button.getStyleClass().add(CustomStyleClass.CUSTOM_BTN_COLOR_PRIMARY);
         return button;
     }
@@ -78,9 +85,10 @@ public class CustomComponentFactory {
 
     public static JFXTextArea generateTextAreaField() {
         JFXTextArea textArea = new JFXTextArea();
-        textArea.setPrefRowCount(10);
-        textArea.setPrefColumnCount(8);
+        textArea.setPrefRowCount(7);
+        textArea.setPrefColumnCount(13);
         textArea.setWrapText(true);
+        textArea.getStyleClass().add(CustomStyleClass.CUSTOM_TEXTAREA);
         return textArea;
     }
 

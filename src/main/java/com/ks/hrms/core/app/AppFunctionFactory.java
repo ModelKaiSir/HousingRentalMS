@@ -48,7 +48,7 @@ public class AppFunctionFactory {
             Object object = clazz.newInstance();
             if (null != object) {
                 ((AppFunctionMain) object).init(context,null);
-                TimeUnit.SECONDS.sleep(5);
+                TimeUnit.SECONDS.sleep(1);
                 return (AppFunctionMain) object;
             } else {
                 return null;

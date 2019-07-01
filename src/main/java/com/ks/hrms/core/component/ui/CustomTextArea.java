@@ -21,11 +21,13 @@ public class CustomTextArea extends AbstractCustomParent implements AbstractCust
     @Override
     public void init() {
         contentProperty.set(CustomComponentFactory.generateHBox());
-        Label lb = new Label();
-        lb.textProperty().bind(captionProperty());
+        Label lb = CustomComponentFactory.generateCaptionLb();
         area = CustomComponentFactory.generateTextAreaField();
         contentProperty.get().getChildren().addAll(lb,area);
 
+        lb.textProperty().bind(captionProperty());
+        area.prefHeightProperty().bind(heightProperty());
+        area.prefWidthProperty().bind(widthProperty());
         area.textProperty().addListener((observable,old,nv) ->{
             value.set(nv);
         });
@@ -69,5 +71,21 @@ public class CustomTextArea extends AbstractCustomParent implements AbstractCust
     @Override
     public ObjectProperty<String> initValueProperty() {
         return initValue;
+    }
+
+    @Override
+    public void setHeight(double height) {
+        if(height <= 0){
+            height = CustomComponentFactory.TEXTAREA_MIN_HEIGHT;
+        }
+        super.setHeight(height);
+    }
+
+    @Override
+    public void setWidth(double width) {
+        if(width <= 0){
+            width = CustomComponentFactory.TEXTAREA_MIN_WIDTH;
+        }
+        super.setWidth(width);
     }
 }

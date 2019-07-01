@@ -5,38 +5,47 @@ import com.jfoenix.controls.JFXTimePicker;
 import com.ks.hrms.utils.Utils;
 import com.sun.javaws.util.JfxHelper;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
+import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-public class CustomDatePicker extends AbstractCustomParent<Object> implements AbstractCustomParent.InitValue<String> {
+/**
+ * 日期控件
+ * @author QiuKai
+ */
+public class CustomDatePicker extends AbstractCustomParent<DateTimeValue> implements AbstractCustomParent.InitValue<String> {
 
     public static final String TYPE_DATE = "DATE";
     public static final String TYPE_DATE_TIME = "DATETIME";
 
     private String type;
 
-    private DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private ObjectProperty<HBox> content = new SimpleObjectProperty<>();
     private ObjectProperty<DateTimeValue> value = new SimpleObjectProperty<>();
     private ObjectProperty<String> localDateStr = new SimpleObjectProperty();
 
-    public CustomDatePicker(String id, String caption,String type) {
+    public CustomDatePicker(String id, String caption, String type) {
         super(id, caption);
         this.type = type;
     }
 
     @Override
     public void init() {
+
         content.set(CustomComponentFactory.generateHBox());
-        Label lb = new Label();
+        Label lb = CustomComponentFactory.generateCaptionLb();
         lb.textProperty().bind(captionProperty());
+
         switch (type){
             case TYPE_DATE:
                 JFXDatePicker datePicker = CustomComponentFactory.generateDatePicker();
@@ -56,8 +65,17 @@ public class CustomDatePicker extends AbstractCustomParent<Object> implements Ab
 
         localDateStr.addListener((obs,old,nv) ->{
             if(!Utils.isEmpty(nv)){
+                DateTimeValue dateTimeValue = value.get();
                 //转换成日期
-                value.get().setValue(LocalDateTime.parse(nv,timeFormatter));
+                switch (type){
+                    case TYPE_DATE:
+                        dateTimeValue.setValue(LocalDateTime.of(dateTimeValue.toLocalDate(nv),LocalTime.now()));
+                        break;
+                    case TYPE_DATE_TIME:
+                        dateTimeValue.setValue(dateTimeValue.toLocalDateTime(nv));
+                        break;
+                }
+
             }
         });
     }
@@ -88,46 +106,14 @@ public class CustomDatePicker extends AbstractCustomParent<Object> implements Ab
     }
 
     @Override
-    public Object getValue() {
-        return null;
+    public DateTimeValue getValue() {
+        return value.get();
     }
 
     @Override
-    public ObjectProperty valueProperty() {
-        return null;
+    public ObjectProperty<DateTimeValue> valueProperty() {
+        return value;
     }
 
-    class DateTimeValue{
 
-        private JFXDatePicker datePicker;
-        private JFXTimePicker timePicker;
-
-        public DateTimeValue(JFXDatePicker date, JFXTimePicker time) {
-            this.datePicker = date;
-            this.timePicker = time;
-        }
-
-        public DateTimeValue(JFXDatePicker date) {
-            this(date,null);
-        }
-
-        public void setValue(LocalDateTime dateTime){
-            datePicker.setValue(dateTime.toLocalDate());
-            if(null!=timePicker){
-                timePicker.setValue(dateTime.toLocalTime());
-            }
-        }
-
-        public Object getValue(){
-
-            if(timePicker == null){
-                return datePicker.getValue();
-            }else{
-                LocalDate d = datePicker.getValue();
-                LocalTime t = timePicker.getValue();
-
-                return LocalDateTime.of(d,t);
-            }
-        }
-    }
 }

@@ -4,7 +4,10 @@ import com.jfoenix.controls.cells.editors.TextFieldEditorBuilder;
 import com.jfoenix.controls.cells.editors.base.EditorNodeBuilder;
 import com.jfoenix.controls.cells.editors.base.GenericEditableTreeTableCell;
 import com.jfoenix.controls.cells.editors.base.JFXTreeTableCell;
+import com.ks.hrms.core.component.form.DataItem;
 import com.ks.hrms.core.component.ui.*;
+import com.ks.hrms.core.component.ui.cells.DatePickerBuilder;
+import com.ks.hrms.core.component.ui.cells.GenericChoiceTreeTableCell;
 import com.ks.hrms.utils.Utils;
 
 import java.util.ArrayList;
@@ -57,6 +60,13 @@ public class FormFieldFactory {
                     parseField(formField, obj);
                 }).fine();
                 return textField;
+
+            case FormField.ATTRIBUTE_TYPE_PASSWORD:
+                CustomPassWord password = new CustomPassWord(formField.getId(), formField.getCaption());
+                password = new CustomParentAdapter<CustomPassWord>(password, obj -> {
+                    parseField(formField, obj);
+                }).fine();
+                return password;
 
             case FormField.ATTRIBUTE_TYPE_TEXTAREA:
                 CustomTextArea area = new CustomTextArea(formField.getId(), formField.getCaption());
@@ -125,6 +135,9 @@ public class FormFieldFactory {
 
     public JFXTreeTableCell generateFieldBuilder(FormField formField) {
         switch (formField.getType()) {
+            case FormField.ATTRIBUTE_TYPE_DATE:
+            case FormField.ATTRIBUTE_TYPE_DATETIME:
+                return new GenericChoiceTreeTableCell<DataItem,DateTimeValue>(new DatePickerBuilder(formField));
             default:
                 return new GenericEditableTreeTableCell(new TextFieldEditorBuilder());
         }
@@ -137,7 +150,6 @@ public class FormFieldFactory {
     public HashMap<String, AbstractCustomParent> getFieldMap() {
         return fieldMap;
     }
-
 
     class CustomParentAdapter<T extends AbstractCustomParent> {
 

@@ -52,24 +52,15 @@ public class CustomComboBox extends AbstractCustomParent implements AbstractCust
     @Override
     public void init() {
         lb = CustomComponentFactory.generateCaptionLb();
-        lb.textProperty().bind(captionProperty());
         dataMap = FXCollections.observableHashMap();
         comboBox = CustomComponentFactory.generateComBox(this);
         HBox root = CustomComponentFactory.generateHBox(lb,comboBox);
+
+        lb.textProperty().bind(captionProperty());
+        comboBox.prefHeightProperty().bind(heightProperty());
+        comboBox.prefWidthProperty().bind(widthProperty());
         contentProperty.set(root);
 
-        this.comboBox.valueProperty().addListener((ob,old,nv) ->{
-            this.comboBox.setItems(this.comboBox.getItems().filtered(e ->{
-                if(Utils.isEmpty(nv) || Utils.isEmpty(nv.getUserData())){
-                    return false;
-                }
-                System.out.println(e.getUserData()+":"+nv.getUserData());
-                if(e.getUserData().toString().contains(nv.getUserData().toString())){
-                    return true;
-                }
-                return false;
-            }));
-        });
     }
 
     @Override
@@ -105,5 +96,13 @@ public class CustomComboBox extends AbstractCustomParent implements AbstractCust
     @Override
     public ObjectProperty valueProperty() {
         return null;
+    }
+
+    @Override
+    public void setWidth(double width) {
+        if(width <= 0){
+            width = CustomComponentFactory.COMBO_BOX_MIN_WIDTH;
+        }
+        super.setWidth(width);
     }
 }

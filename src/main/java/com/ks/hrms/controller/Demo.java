@@ -31,7 +31,7 @@ public class Demo extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        tableForm = new TableForm(Pos.CENTER,getFormFields());
+        tableForm = TableForm.createTableForm(Pos.CENTER,getFormFields());
         tableForm.setData(FXCollections.observableArrayList(tableForm.newItem(),tableForm.newItem())).init();
         /*TreeItem<User> root = new RecursiveTreeItem<>(FXCollections.observableArrayList(new User("A")), RecursiveTreeObject::getChildren);
         tableForm = new JFXTreeTableView<>(root);

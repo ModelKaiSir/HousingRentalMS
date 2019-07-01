@@ -24,7 +24,6 @@ public class DataItem extends RecursiveTreeObject<DataItem> implements Item {
 
     @Override
     public AbstractCustomParent getItemProperty(String id) {
-        System.out.println(columns.get(id));
        return columns.get(id);
     }
 }

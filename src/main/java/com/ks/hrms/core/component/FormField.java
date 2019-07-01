@@ -50,6 +50,8 @@ public class FormField {
 
     public static final String TEXTFIELD = "TYPE=TEXTFIELD;";
     public static final String ATTRIBUTE_TYPE_TEXTFIELD = "TEXTFIELD";
+    public static final String ATTRIBUTE_TYPE_PASSWORD = "PASSWORD";
+    public static final String PASSWORD = "TYPE=PASSWORD;";
     public static final String BUTTON = "TYPE=BUTTON;";
     public static final String ATTRIBUTE_TYPE_BUTTON = "BUTTON";
     public static final String BUTTONS = "TYPE=GROUP_BUTTON;";
