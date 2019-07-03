@@ -32,6 +32,13 @@ public interface CustomParent<T> {
      */
     void setEditable(boolean b);
     SimpleBooleanProperty editableProperty();
+
+    /**
+     * 是否启用
+     * @param b
+     */
+    void setDisable(boolean b);
+    SimpleBooleanProperty disableProperty();
     /**
      * 是否必填
      * @param r

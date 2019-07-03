@@ -6,8 +6,7 @@ import com.jfoenix.controls.cells.editors.base.GenericEditableTreeTableCell;
 import com.jfoenix.controls.cells.editors.base.JFXTreeTableCell;
 import com.ks.hrms.core.component.form.DataItem;
 import com.ks.hrms.core.component.ui.*;
-import com.ks.hrms.core.component.ui.cells.DatePickerBuilder;
-import com.ks.hrms.core.component.ui.cells.GenericChoiceTreeTableCell;
+import com.ks.hrms.core.component.ui.cells.*;
 import com.ks.hrms.utils.Utils;
 
 import java.util.ArrayList;
@@ -33,7 +32,7 @@ public class FormFieldFactory {
         }
     }
 
-    private void parseField(FormField formField, AbstractCustomParent field) {
+    public static void parseField(FormField formField, AbstractCustomParent field) {
         field.setEditable(formField.isReadOnly());
         field.setRequired(formField.isRequired());
         field.setBreakable(formField.isBreak());
@@ -113,7 +112,7 @@ public class FormFieldFactory {
                 return radGroup;
 
             case FormField.GROUP_CHECKBOX:
-                CustomCheckBox checkGroup = new CustomCheckBox(formField.getId(), formField.getCaption(), Utils.getValue(String.class, formField.getDefValue()));
+                CustomCheckBox checkGroup = new CustomCheckBox(formField.getId(), formField.getCaption());
                 checkGroup = new CustomParentAdapter<CustomCheckBox>(checkGroup, obj -> {
                     obj.addSelect(formField.getItemList());
                     parseField(formField, obj);
@@ -137,7 +136,13 @@ public class FormFieldFactory {
         switch (formField.getType()) {
             case FormField.ATTRIBUTE_TYPE_DATE:
             case FormField.ATTRIBUTE_TYPE_DATETIME:
-                return new GenericChoiceTreeTableCell<DataItem,DateTimeValue>(new DatePickerBuilder(formField));
+                return new GenericChoiceTreeTableCell<DataItem,String>(new DatePickerBuilder(formField));
+            case FormField.ATTRIBUTE_TYPE_BUTTON:
+                return new GenericChoiceTreeTableCell(new ButtonBuilder(formField));
+            case FormField.GROUP_CHECKBOX:
+                return new GenericChoiceTreeTableCell(new CheckBoxBuilder(formField));
+            case FormField.GROUP_COMBOBOX:
+                return new GenericEditableTreeTableCell(new ComboBoxEditBuilder(formField));
             default:
                 return new GenericEditableTreeTableCell(new TextFieldEditorBuilder());
         }

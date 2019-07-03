@@ -22,6 +22,7 @@ public class TestAppFunctionMain extends AppFunctionMain {
 
     protected void generateForm() {
         freeForm = FreeForm.createFreeForm(getFormFields());
+        freeForm.setReadOnly(false);
         addComponent(freeForm);
     }
 

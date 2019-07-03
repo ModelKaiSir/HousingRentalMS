@@ -38,7 +38,6 @@ public class CustomPassWord extends AbstractCustomParent implements AbstractCust
         lb.textProperty().bind(captionProperty());
         input.prefWidthProperty().bind(widthProperty());
         input.prefHeightProperty().bind(heightProperty());
-        input.editableProperty().bind(editableProperty());
 
         input.textProperty().addListener((obs,old,nv) -> {
             valueProperty.set(nv);
@@ -49,7 +48,7 @@ public class CustomPassWord extends AbstractCustomParent implements AbstractCust
         });
 
         HBox root = CustomComponentFactory.generateHBox(lb,input);
-
+        bindProperty(input.disableProperty(),input.editableProperty());
         validator = new RequiredFieldValidator();
         validator.setMessage("不能为空！");
         contentProperty.set(root);

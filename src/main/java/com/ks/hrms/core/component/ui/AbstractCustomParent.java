@@ -1,6 +1,7 @@
 package com.ks.hrms.core.component.ui;
 
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import com.ks.hrms.core.component.ui.extend.CaptionAble;
 import javafx.beans.property.*;
 import javafx.geometry.Pos;
 
@@ -8,17 +9,22 @@ import javafx.geometry.Pos;
  * 自定义
  * @author QiuKai
  */
-public abstract class AbstractCustomParent<T> implements CustomParent<T>{
+public abstract class AbstractCustomParent<T> implements CustomParent<T> {
 
     private SimpleStringProperty id = new SimpleStringProperty();
     private SimpleStringProperty caption = new SimpleStringProperty();
     private SimpleBooleanProperty editable = new SimpleBooleanProperty(true);
+    private SimpleBooleanProperty disable = new SimpleBooleanProperty(false);
     private SimpleBooleanProperty breakable = new SimpleBooleanProperty(false);
     private SimpleBooleanProperty required = new SimpleBooleanProperty(false);
     private SimpleDoubleProperty width = new SimpleDoubleProperty();
     private SimpleDoubleProperty height = new SimpleDoubleProperty();
     private SimpleObjectProperty<Pos> pos = new SimpleObjectProperty<>();
 
+    /**
+     * extend
+     */
+    protected boolean hideCaption;
     /**
      * 初始化
      */
@@ -142,6 +148,21 @@ public abstract class AbstractCustomParent<T> implements CustomParent<T>{
         this.pos.set(pos);
     }
 
+    @Override
+    public void setDisable(boolean disable) {
+        this.disable.set(disable);
+    }
+
+    @Override
+    public SimpleBooleanProperty disableProperty() {
+        return disable;
+    }
+
+
+    public void bindProperty(BooleanProperty disable,BooleanProperty editable){
+        disable.bind(this.disable);
+        editable.bind(this.editable);
+    }
     /**
      * 支持设置默认值 如 TextField等Control控件
      * @param <T>

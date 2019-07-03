@@ -11,6 +11,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * AppFunction Item
+ * 应用的数据
+ * @author QiuKai
+ */
 public class DataItem extends RecursiveTreeObject<DataItem> implements Item {
 
     private Map<String,AbstractCustomParent> columns = new HashMap<>();

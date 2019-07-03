@@ -25,6 +25,7 @@ public class CustomButtonGroup extends AbstractCustomParent {
         for (FormField.FormFieldAttribute v:values){
             Button button = CustomComponentFactory.generateButton(v.getKey());
             button.setId(v.getValue());
+            button.disableProperty().bind(disableProperty());
             buttons.add(button);
             contentProperty.get().getChildren().add(button);
         }

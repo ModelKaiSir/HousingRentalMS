@@ -133,7 +133,6 @@ public class CustomComponentFactory {
 
     public static JFXComboBox<Label> generateComBox(CustomComboBox comBoBox) {
         JFXComboBox<Label> box = new JFXComboBox<>();
-        box.setEditable(true);
         box.setCellFactory(param -> {
 
             ComboBoxListCell<Label> listCell = new ComboBoxListCell<Label>();

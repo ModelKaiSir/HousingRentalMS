@@ -20,6 +20,7 @@ public class CustomTextArea extends AbstractCustomParent implements AbstractCust
 
     @Override
     public void init() {
+
         contentProperty.set(CustomComponentFactory.generateHBox());
         Label lb = CustomComponentFactory.generateCaptionLb();
         area = CustomComponentFactory.generateTextAreaField();
@@ -35,6 +36,8 @@ public class CustomTextArea extends AbstractCustomParent implements AbstractCust
         value.addListener((observable,old,nv) ->{
             area.setText(nv.toString());
         });
+
+        bindProperty(area.disableProperty(),area.editableProperty());
     }
 
     @Override

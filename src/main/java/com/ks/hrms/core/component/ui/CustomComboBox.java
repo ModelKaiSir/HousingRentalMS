@@ -1,6 +1,7 @@
 package com.ks.hrms.core.component.ui;
 
 import com.jfoenix.controls.JFXComboBox;
+import com.ks.hrms.core.component.ui.extend.CaptionAble;
 import com.ks.hrms.utils.Utils;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -12,11 +13,10 @@ import javafx.scene.layout.HBox;
 
 import java.util.Map;
 
-public class CustomComboBox extends AbstractCustomParent implements AbstractCustomParent.InitValue<Label> {
+public class CustomComboBox extends AbstractCustomParent<String> implements AbstractCustomParent.InitValue<Label>,CaptionAble<CustomComboBox> {
 
     private ObservableMap<String,String> dataMap;
     private JFXComboBox<Label> comboBox;
-    private Label lb;
 
     private SimpleObjectProperty<HBox> contentProperty = new SimpleObjectProperty<>();
     private SimpleObjectProperty<Label> initValueProperty = new SimpleObjectProperty<>();
@@ -48,17 +48,30 @@ public class CustomComboBox extends AbstractCustomParent implements AbstractCust
         }
     }
 
+    @Override
+    public CustomComboBox hideCaption(boolean b) {
+        hideCaption = b;
+        return this;
+    }
 
     @Override
     public void init() {
-        lb = CustomComponentFactory.generateCaptionLb();
+
         dataMap = FXCollections.observableHashMap();
         comboBox = CustomComponentFactory.generateComBox(this);
-        HBox root = CustomComponentFactory.generateHBox(lb,comboBox);
+        HBox root = CustomComponentFactory.generateHBox();
 
-        lb.textProperty().bind(captionProperty());
+        if(!hideCaption){
+            Label lb = CustomComponentFactory.generateCaptionLb();
+            lb.textProperty().bind(captionProperty());
+            root.getChildren().add(lb);
+        }
+
+        root.getChildren().add(comboBox);
+
         comboBox.prefHeightProperty().bind(heightProperty());
         comboBox.prefWidthProperty().bind(widthProperty());
+        bindProperty(comboBox.disableProperty(),comboBox.editableProperty());
         contentProperty.set(root);
 
     }
@@ -89,13 +102,13 @@ public class CustomComboBox extends AbstractCustomParent implements AbstractCust
     }
 
     @Override
-    public Object getValue() {
-        return null;
+    public String getValue() {
+        return comboBox.getValue().getText();
     }
 
     @Override
     public ObjectProperty valueProperty() {
-        return null;
+        return comboBox.valueProperty();
     }
 
     @Override
@@ -104,5 +117,9 @@ public class CustomComboBox extends AbstractCustomParent implements AbstractCust
             width = CustomComponentFactory.COMBO_BOX_MIN_WIDTH;
         }
         super.setWidth(width);
+    }
+
+    public JFXComboBox<Label> getComboBox() {
+        return comboBox;
     }
 }

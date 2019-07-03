@@ -6,6 +6,7 @@ import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import com.ks.hrms.core.component.form.Item;
 import com.ks.hrms.core.component.ui.AbstractCustomParent;
 import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.ContentDisplay;
@@ -19,7 +20,7 @@ import java.util.List;
 
 public class GenericChoiceTreeTableCell<S extends Item, T> extends JFXTreeTableCell<S, T> {
 
-    protected ChoiceNodeBuilder<T> builder;
+    protected ChoiceNodeBuilder<S, T> builder;
     protected AbstractCustomParent node;
 
 
@@ -28,7 +29,7 @@ public class GenericChoiceTreeTableCell<S extends Item, T> extends JFXTreeTableC
      *
      * @param builder
      */
-    public GenericChoiceTreeTableCell(ChoiceNodeBuilder<T> builder) {
+    public GenericChoiceTreeTableCell(ChoiceNodeBuilder<S, T> builder) {
         this.builder = builder;
     }
 
@@ -48,7 +49,6 @@ public class GenericChoiceTreeTableCell<S extends Item, T> extends JFXTreeTableC
         }
         try {
             builder.validateValue();
-            builder.setValue((T) builder.getValue());
             commitEdit((T) builder.getValue());
         } catch (Exception ex) {
             //Most of the time we don't mind if there is a parse exception as it
@@ -63,6 +63,10 @@ public class GenericChoiceTreeTableCell<S extends Item, T> extends JFXTreeTableC
 
     }
 
+    private void setValue(T t) {
+        setItem(t);
+    }
+
     /**
      * Provides the string representation of the value of this cell when the cell is not being edited.
      */
@@ -72,27 +76,18 @@ public class GenericChoiceTreeTableCell<S extends Item, T> extends JFXTreeTableC
 
     @Override
     public void startEdit() {
+        System.out.println("startEdit");
+        if (node == null) {
+            createNode();
+        }
+
         if (isEditable() && checkGroupedColumn()) {
             super.startEdit();
-            if (node == null) {
-                createNode();
-            } else {
-                // set current value if the editor is already created
-                builder.setValue(getValue());
-            }
-            builder.startEdit();
-            setGraphic(node.content());
-            setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-        }else{
-            //非编辑状态也是显示控件
-            if (node == null) {
-                createNode();
-            } else {
-                // set current value if the editor is already created
-                builder.setValue(getValue());
-            }
-            setGraphic(node.content());
         }
+
+        setGraphic(node.content());
+        builder.setValue(getValue());
+        setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
     }
 
     @Override
@@ -132,38 +127,31 @@ public class GenericChoiceTreeTableCell<S extends Item, T> extends JFXTreeTableC
 
     @Override
     public void updateItem(T item, boolean empty) {
-
         super.updateItem(item, empty);
+
         if (empty) {
             setText(null);
             setGraphic(null);
         } else {
 
+            if (null == node) {
+                createNode();
+            }
+
             if (isEditing() && checkGroupedColumn()) {
-                if (node != null) {
-                    builder.setValue(getValue());
-                }
                 setGraphic(node.content());
                 setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
                 builder.updateItem(item, empty);
-
             } else {
-                Object value = getValue();
-                System.out.println("other "+value);
-                if(null != node){
-                    setGraphic(node.content());
-                    setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-                }else{
-                    createNode();
-                    setGraphic(node.content());
-                    setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-                }
+                setGraphic(node.content());
+                setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
                 setText(null);
             }
         }
     }
 
     private void createNode() {
+
         EventHandler<KeyEvent> keyEventsHandler = t -> {
 
             if (t.getCode() == KeyCode.ENTER) {
@@ -184,19 +172,20 @@ public class GenericChoiceTreeTableCell<S extends Item, T> extends JFXTreeTableC
             getTreeTableView().getSelectionModel().select(getIndex());
             TreeItem<S> item = getTreeTableView().getSelectionModel().getSelectedItem();
 
-            if(null==item){
+            if (null == item) {
                 //select Item
                 getTreeTableView().getSelectionModel().select(getIndex());
                 return;
             }
 
-            builder.setValue(getValue());
-            startEdit();
             if (node != null && !newValue) {
                 commitHelper(true);
             }
         };
+
         node = builder.createNode(getValue(), keyEventsHandler, focusChangeListener);
+        node.setEditable(getTreeTableView().isEditable());
+        node.setDisable(!getTreeTableView().isEditable());
     }
 
     /**

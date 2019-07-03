@@ -1,60 +1,91 @@
 package com.ks.hrms.core.app;
 
 import com.ks.hrms.core.component.bar.CustomToolbar;
-import com.ks.hrms.core.component.bar.Toolbar;
 import com.ks.hrms.core.component.bar.ToolbarControl;
+import com.ks.hrms.core.component.form.DataItem;
 import com.ks.hrms.core.context.FunctionParamter;
 import com.ks.hrms.core.context.HRMSAppFunctionContext;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.Event;
 import javafx.scene.Node;
 import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 
-public class AppFunctionMain extends Tab implements ToolbarControl {
+public class AppFunctionMain extends BorderPane implements ToolbarControl,App,AppPage {
 
-    private BorderPane rootPane;
+    private AppFunction function;
+
     private CustomToolbar toolbar;
     private SimpleStringProperty caption = new SimpleStringProperty();
 
+    protected SimpleObjectProperty<DataItem> item = new SimpleObjectProperty<>();
+
     public AppFunctionMain() {
-        rootPane = new BorderPane();
-        super.textProperty().bind(caption);
+
         toolbar = (CustomToolbar) new CustomToolbar(this).init();
-        rootPane.setTop(toolbar);
-        setContent(rootPane);
+        setTop(toolbar);
 
-        setOnClosed(value ->{
-            closed();
-        });
+    }
 
-        setOnCloseRequest(value ->{
-            doClose();
-        });
+    @Override
+    public void setAppManager(AppFunction appFunction) {
+        this.function = appFunction;
     }
 
     public void init(HRMSAppFunctionContext context, FunctionParamter functionParamter){
-    }
 
-    public void setCaption(String caption) {
-        this.caption.set(caption);
     }
 
     @Override
     public void onClickButton(int id) {
-        System.out.println(id);
         close();
     }
 
     public void addComponent(Node node){
-        rootPane.setCenter(node);
+        setCenter(node);
     }
 
+    @Override
+    public AppPage getNext() {
+        return null;
+    }
+
+    @Override
+    public AppPage getLast() {
+        return null;
+    }
+
+    @Override
+    public boolean hasNext() {
+        return false;
+    }
+
+    @Override
+    public boolean hasLast() {
+        return false;
+    }
+
+    @Override
+    public int getIndex() {
+        return 0;
+    }
+
+    @Override
+    public void setPageIndex(int pageIndex) {
+
+    }
+
+    /**
+     * 点击退出按钮 首先进行相关操作 再清除资源 然后通知管理者关闭
+     */
     private void close(){
-        this.getOnCloseRequest().handle(new Event(Tab.TAB_CLOSE_REQUEST_EVENT));
-        getTabPane().getTabs().remove(this);
-        this.getOnClosed().handle(new Event(Tab.CLOSED_EVENT));
+        update();
+        clearApp();
+        doClose();
+        closed();
+        //function.closePage(this);
     }
 
     public void doClose(){
@@ -63,5 +94,25 @@ public class AppFunctionMain extends Tab implements ToolbarControl {
 
     public void closed(){
 
+    }
+
+    protected boolean update(){
+        return true;
+    }
+
+    protected void clearApp(){
+
+    }
+
+    public void newItem(){
+
+    }
+
+    public void setItem(DataItem item){
+        this.item.set(item);
+    }
+
+    public void setCaption(String caption) {
+        this.caption.set(caption);
     }
 }

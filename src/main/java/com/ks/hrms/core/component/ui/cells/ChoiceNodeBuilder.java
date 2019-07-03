@@ -6,7 +6,7 @@ import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Region;
 
-public interface ChoiceNodeBuilder<T> {
+public interface ChoiceNodeBuilder<S,T> {
 
     void startEdit();
 
@@ -21,4 +21,5 @@ public interface ChoiceNodeBuilder<T> {
     T getValue();
 
     void validateValue() throws Exception;
+
 }

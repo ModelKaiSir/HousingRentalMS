@@ -39,6 +39,7 @@ public class CustomRadioBox extends AbstractCustomParent implements AbstractCust
 
         for (FormField.FormFieldAttribute item:itemList){
             RadioButton r =CustomComponentFactory.generateRadioBox(item.getKey(),item.getValue(),group);
+            r.disableProperty().bind(disableProperty());
             radioButtons.add(r);
             rootProperty.get().getChildren().add(r);
         }

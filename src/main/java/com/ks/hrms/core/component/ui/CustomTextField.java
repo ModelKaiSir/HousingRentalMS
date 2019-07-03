@@ -49,7 +49,7 @@ public class CustomTextField extends AbstractCustomParent implements AbstractCus
         });
 
         HBox root = CustomComponentFactory.generateHBox(lb,input);
-
+        bindProperty(input.disableProperty(),input.editableProperty());
         validator = new RequiredFieldValidator();
         validator.setMessage("不能为空！");
         contentProperty.set(root);

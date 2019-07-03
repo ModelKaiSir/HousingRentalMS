@@ -23,7 +23,7 @@ public class CustomButton extends AbstractCustomParent<String> {
         contentProperty.get().prefHeightProperty().bind(heightProperty());
         contentProperty.get().prefWidthProperty().bind(widthProperty());
         contentProperty.get().textProperty().bind(captionProperty());
-        contentProperty.get().disableProperty().bind(editableProperty());
+        contentProperty.get().disableProperty().bind(disableProperty());
     }
 
     @Override
