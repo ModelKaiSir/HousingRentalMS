@@ -1,6 +1,6 @@
 package com.ks.hrms.core.context;
 
-import com.ks.hrms.core.app.AppFunctionMain;
+import com.ks.hrms.core.app.AppFunctionBase;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import org.springframework.context.ApplicationContext;
@@ -8,21 +8,21 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class HRMSAppFunctionContext extends AbstractAppFunctionContext {
 
-    private ObjectProperty<AppFunctionMain> localApp = new SimpleObjectProperty<>();
+    private ObjectProperty<AppFunctionBase> localApp = new SimpleObjectProperty<>();
 
     public static HRMSAppFunctionContext getInstance(){
         return Factory.init();
     }
 
-    public AppFunctionMain getLocalApp() {
+    public AppFunctionBase getLocalApp() {
         return localApp.get();
     }
 
-    public ObjectProperty<AppFunctionMain> localAppProperty() {
+    public ObjectProperty<AppFunctionBase> localAppProperty() {
         return localApp;
     }
 
-    public void setLocalApp(AppFunctionMain localApp) {
+    public void setLocalApp(AppFunctionBase localApp) {
         this.localApp.set(localApp);
     }
 

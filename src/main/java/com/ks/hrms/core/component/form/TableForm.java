@@ -6,6 +6,8 @@ import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import com.ks.hrms.core.component.FormField;
 import com.ks.hrms.core.component.FormFieldFactory;
+import com.ks.hrms.core.component.bar.TableHeaderToolbar;
+import com.ks.hrms.core.component.bar.ToolbarControl;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -16,6 +18,8 @@ import javafx.scene.Parent;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import sun.reflect.generics.tree.Tree;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,10 +29,13 @@ import java.util.stream.Collectors;
  * table AbstractForm
  * @author QiuKai
  */
-public class TableForm extends AbstractForm {
+public class TableForm extends AbstractForm implements ToolbarControl{
 
     private JFXTreeTableView<DataItem> tableView;
-    private SimpleBooleanProperty editable;
+    private SimpleBooleanProperty toolbarVisible = new SimpleBooleanProperty(true);
+
+    private TableHeaderToolbar tableHeaderToolbar;
+
     private TableForm(ArrayList<FormField> formFields) {
         this(null,formFields);
     }
@@ -53,17 +60,20 @@ public class TableForm extends AbstractForm {
 
     @Override
     protected void beforeGenerateContent() {
-
+        tableHeaderToolbar = new TableHeaderToolbar(this);
+        tableHeaderToolbar.init();
         tableView = new JFXTreeTableView<>();
         tableView.setShowRoot(false);
         tableView.editableProperty().bind(Bindings.not(readOnlyProperty()));
         tableView.setColumnResizePolicy(JFXTreeTableView.CONSTRAINED_RESIZE_POLICY);
+        tableHeaderToolbar.visibleProperty().bind(toolbarVisible);
 
     }
 
     @Override
     protected void afterGenerateContent() {
-        getChildren().add(tableView);
+        setTop(tableHeaderToolbar);
+        setCenter(tableView);
         AnchorPane.setTopAnchor(tableView, 5.0);
         AnchorPane.setBottomAnchor(tableView, 1.0);
         AnchorPane.setLeftAnchor(tableView, 1.0);
@@ -76,6 +86,10 @@ public class TableForm extends AbstractForm {
         return this;
     }
 
+    public void setToolbarVisible(boolean toolbarVisible) {
+        this.toolbarVisible.set(toolbarVisible);
+    }
+
     public JFXTreeTableView<DataItem> getTable() {
         return tableView;
     }
@@ -83,6 +97,8 @@ public class TableForm extends AbstractForm {
     @Override
     public void newItem() {
         DataItem item = new DataItem(fieldFactory);
+        TreeItem<DataItem> item1 = new RecursiveTreeItem<>(item,RecursiveTreeObject::getChildren);
+        getTable().getRoot().getChildren().add(item1);
     }
 
     @Override
@@ -93,6 +109,22 @@ public class TableForm extends AbstractForm {
     @Override
     public void update() {
 
+    }
+
+    @Override
+    public void onClickButton(int id) {
+
+        switch (id){
+            case TableHeaderToolbar.ADD_ROW:
+                this.newItem();
+                break;
+            case TableHeaderToolbar.DEL_ROW:
+                TreeItem item = tableView.getSelectionModel().getSelectedItem();
+                if(null!=item){
+                    tableView.getRoot().getChildren().remove(item);
+                }
+                break;
+        }
     }
 
     private void generateCellValueFactory(JFXTreeTableColumn<DataItem, Object> col, final String id) {

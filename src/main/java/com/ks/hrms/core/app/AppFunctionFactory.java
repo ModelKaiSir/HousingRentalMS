@@ -6,20 +6,19 @@ import com.ks.hrms.core.context.HRMSAppFunctionContext;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.concurrent.Task;
 
-import java.lang.reflect.Constructor;
 import java.util.concurrent.TimeUnit;
 
 public class AppFunctionFactory {
 
-    public static ReadOnlyObjectProperty<AppFunctionMain> generate(final SpinnerLayout spinnerLayout, final AppMenuItem item) {
+    public static ReadOnlyObjectProperty<AppFunctionBase> generate(final SpinnerLayout spinnerLayout, final AppMenuItem item) {
 
         //打开spinnerLayout
 
-        Task<AppFunctionMain> task = new Task() {
+        Task<AppFunctionBase> task = new Task() {
             @Override
-            protected AppFunctionMain call() throws Exception {
+            protected AppFunctionBase call() throws Exception {
                 running();
-                AppFunctionMain app = generateApp(item);
+                AppFunctionBase app = generateApp(item);
                 updateValue(app);
                 succeeded();
                 return app;
@@ -41,15 +40,15 @@ public class AppFunctionFactory {
         return task.valueProperty();
     }
 
-    private static AppFunctionMain generateApp(AppMenuItem item) {
+    private static AppFunctionBase generateApp(AppMenuItem item) {
         try {
             Class clazz = Class.forName(item.getClassPath());
             HRMSAppFunctionContext context = HRMSAppFunctionContext.getInstance();
             Object object = clazz.newInstance();
             if (null != object) {
-                ((AppFunctionMain) object).init(context,null);
+                ((AppFunctionBase) object).init(context);
                 TimeUnit.SECONDS.sleep(1);
-                return (AppFunctionMain) object;
+                return (AppFunctionBase) object;
             } else {
                 return null;
             }

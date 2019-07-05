@@ -8,6 +8,9 @@ import com.ks.hrms.core.component.form.DataItem;
 import com.ks.hrms.core.component.ui.*;
 import com.ks.hrms.core.component.ui.cells.*;
 import com.ks.hrms.utils.Utils;
+import javafx.scene.control.TreeTableCell;
+import javafx.scene.control.cell.CheckBoxTableCell;
+import javafx.scene.control.cell.CheckBoxTreeCell;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -132,7 +135,7 @@ public class FormFieldFactory {
         }
     }
 
-    public JFXTreeTableCell generateFieldBuilder(FormField formField) {
+    public TreeTableCell generateFieldBuilder(FormField formField) {
         switch (formField.getType()) {
             case FormField.ATTRIBUTE_TYPE_DATE:
             case FormField.ATTRIBUTE_TYPE_DATETIME:

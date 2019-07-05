@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * AppFunction Item
+ * AppFunctionBase Item
  * 应用的数据
  * @author QiuKai
  */

@@ -147,7 +147,9 @@ animated-option-sub-cl{
 .custom_tool_bar{
     -fx-background-color: #fca106;
 }
-
+.custom_tool_bar_bg {
+    -fx-background-color: #2474b5;
+}
 /* custom TextArea */
 .custom_textarea{
     -fx-border-color: #d0dfe6;

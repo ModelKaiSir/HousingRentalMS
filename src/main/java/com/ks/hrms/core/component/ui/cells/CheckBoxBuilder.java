@@ -9,6 +9,7 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.input.KeyEvent;
 
 public class CheckBoxBuilder extends AbstractChoiceNodeBuilder<String> {
@@ -41,7 +42,7 @@ public class CheckBoxBuilder extends AbstractChoiceNodeBuilder<String> {
         checkBox.addSelect(formField.getItemList());
         FormFieldFactory.parseField(formField,checkBox);
         checkBox.afterInit();
-        checkBox.contentProperty().get().focusedProperty().addListener(focusChangeListener);
+        checkBox.updateProperty().addListener(focusChangeListener);
         checkBox.content().setTranslateY(15);
         return checkBox;
     }

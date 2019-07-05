@@ -1,10 +1,12 @@
 package com.ks.hrms.core.app;
 
+import com.ks.hrms.core.context.HRMSAppFunctionContext;
+
 public class TestAppFunction extends AppFunction {
 
     @Override
-    public void init() {
-        super.init();
+    public void init(HRMSAppFunctionContext context) {
+        super.init(context);
         setText("测试Function");
     }
 
@@ -17,7 +19,7 @@ public class TestAppFunction extends AppFunction {
 
     @Override
     public AppFunctionNavigator createNavigator() {
-        AppFunctionNavigator navigator = new AppFunctionNavigator();
+        TestAppFunctionNavigator navigator = new TestAppFunctionNavigator();
         navigator.setAppManager(this);
         return navigator;
     }

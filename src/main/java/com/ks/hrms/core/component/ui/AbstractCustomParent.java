@@ -6,19 +6,23 @@ import javafx.beans.property.*;
 import javafx.geometry.Pos;
 
 /**
- * 自定义
+ * 自定义控件属性
  * @author QiuKai
  */
 public abstract class AbstractCustomParent<T> implements CustomParent<T> {
 
     private SimpleStringProperty id = new SimpleStringProperty();
     private SimpleStringProperty caption = new SimpleStringProperty();
+
     private SimpleBooleanProperty editable = new SimpleBooleanProperty(true);
     private SimpleBooleanProperty disable = new SimpleBooleanProperty(false);
     private SimpleBooleanProperty breakable = new SimpleBooleanProperty(false);
     private SimpleBooleanProperty required = new SimpleBooleanProperty(false);
+    private SimpleBooleanProperty selected = new SimpleBooleanProperty();
+
     private SimpleDoubleProperty width = new SimpleDoubleProperty();
     private SimpleDoubleProperty height = new SimpleDoubleProperty();
+
     private SimpleObjectProperty<Pos> pos = new SimpleObjectProperty<>();
 
     /**
@@ -158,11 +162,21 @@ public abstract class AbstractCustomParent<T> implements CustomParent<T> {
         return disable;
     }
 
+    @Override
+    public SimpleBooleanProperty selectedProperty() {
+        return selected;
+    }
 
-    public void bindProperty(BooleanProperty disable,BooleanProperty editable){
+    @Override
+    public void setSelected(boolean selected) {
+        this.selected.set(selected);
+    }
+
+    public void bindProperty(BooleanProperty disable, BooleanProperty editable){
         disable.bind(this.disable);
         editable.bind(this.editable);
     }
+
     /**
      * 支持设置默认值 如 TextField等Control控件
      * @param <T>

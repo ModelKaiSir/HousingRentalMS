@@ -6,12 +6,13 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 
 /**
  * Data Form
  * @author QiuKai
  */
-public abstract class AbstractForm extends AnchorPane implements DataForm<DataItem>{
+public abstract class AbstractForm extends BorderPane implements DataForm<DataItem>{
 
     private SimpleBooleanProperty readOnly = new SimpleBooleanProperty(false);
 

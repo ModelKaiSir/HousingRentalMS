@@ -1,53 +1,53 @@
 package com.ks.hrms.core.app;
 
-import javafx.scene.layout.AnchorPane;
+import com.ks.hrms.core.component.FormField;
+import com.ks.hrms.core.component.bar.Toolbar;
+import com.ks.hrms.core.component.form.DataItem;
+import com.ks.hrms.core.component.form.DataItemConverter;
+import com.ks.hrms.core.component.form.TableForm;
+import com.ks.hrms.core.context.HRMSAppFunctionContext;
+import javafx.scene.control.TreeItem;
+import sun.reflect.generics.tree.Tree;
 
-public class AppFunctionNavigator extends AnchorPane implements App,AppPage {
+import java.util.ArrayList;
 
-    private AppFunction function;
-    private AppPage children;
-    private int index;
+public abstract class AppFunctionNavigator<T> extends AppToolbarControlBase {
 
+    protected TableForm tableForm;
+
+    /**
+     * init FormFields
+     * @return
+     */
+    public abstract ArrayList<FormField> getFormFields();
+
+    private DataItemConverter<T> converter;
     @Override
-    public void setAppManager(AppFunction appFunction) {
-        function = appFunction;
+    public void init(HRMSAppFunctionContext context){
+        super.init(context);
+        tableForm = TableForm.createTableForm(getFormFields());
+        //加载数据
+        loadData();
+        tableForm.setReadOnly(true);
+        tableForm.setToolbarVisible(false);
+        setCenter(tableForm);
     }
 
-    @Override
-    public AppPage getNext() {
+    /**
+     * 转换器
+     * @return
+     */
+    protected abstract DataItemConverter<T> getConverter();
 
-        if(hasNext()){
-            return children;
+    protected void loadData(T...tes){
+        TreeItem<DataItem> root = tableForm.getTable().getRoot();
+        for (T t : tes) {
+            root.getChildren().add(new TreeItem<>(converter.toItem(t)));
         }
-        return null;
     }
 
     @Override
-    public AppPage getLast() {
-        return null;
-    }
-
-    @Override
-    public boolean hasNext() {
-        return null != children;
-    }
-
-    @Override
-    public boolean hasLast() {
-        return false;
-    }
-
-    @Override
-    public int getIndex() {
-        return index;
-    }
-
-    @Override
-    public void setPageIndex(int pageIndex) {
-        index = function.registerPage(this);
-    }
-
-    private void close(){
-        function.closePage(this);
+    public int[] getToolbarIds() {
+        return new int[]{ Toolbar.EXIT,Toolbar.NEW,Toolbar.VIEW,Toolbar.MODIFY};
     }
 }

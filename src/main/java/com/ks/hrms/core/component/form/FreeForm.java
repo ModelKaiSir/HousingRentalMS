@@ -3,9 +3,12 @@ package com.ks.hrms.core.component.form;
 import com.ks.hrms.core.component.FormField;
 import com.ks.hrms.core.component.FormFieldFactory;
 import com.ks.hrms.core.component.ui.AbstractCustomParent;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Parent;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 
@@ -46,6 +49,7 @@ public class FreeForm extends AbstractForm {
         if (null != pos) {
             contentPane.setAlignment(pos);
         }
+
     }
 
     @Override
@@ -78,7 +82,10 @@ public class FreeForm extends AbstractForm {
         for (ColumnConstraints column : contentPane.getColumnConstraints()) {
             column.setPrefWidth(GridPane.USE_COMPUTED_SIZE);
         }
-        getChildren().add(contentPane);
+        ScrollPane sp = new ScrollPane(contentPane);
+        sp.setFitToWidth(true);
+        sp.setFitToHeight(true);
+        setCenter(sp);
     }
 
     public void readOnlyAble(){

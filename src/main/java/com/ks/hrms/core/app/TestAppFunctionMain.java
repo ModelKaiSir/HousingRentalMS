@@ -14,10 +14,9 @@ public class TestAppFunctionMain extends AppFunctionMain {
     private FreeForm freeForm;
 
     @Override
-    public void init(HRMSAppFunctionContext context, FunctionParamter functionParamter) {
-        super.init(context, functionParamter);
+    public void init(HRMSAppFunctionContext context) {
+        super.init(context);
         generateForm();
-        setCaption("测试维护功能");
     }
 
     protected void generateForm() {

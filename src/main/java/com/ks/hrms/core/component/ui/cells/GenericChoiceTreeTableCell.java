@@ -5,6 +5,10 @@ import com.jfoenix.controls.cells.editors.base.JFXTreeTableCell;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import com.ks.hrms.core.component.form.Item;
 import com.ks.hrms.core.component.ui.AbstractCustomParent;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
@@ -14,6 +18,8 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.util.Callback;
+import javafx.util.StringConverter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,14 +29,36 @@ public class GenericChoiceTreeTableCell<S extends Item, T> extends JFXTreeTableC
     protected ChoiceNodeBuilder<S, T> builder;
     protected AbstractCustomParent node;
 
+    private ObservableValue<Boolean> booleanProperty;
 
     /**
-     * 直接在TableView上显示的控件 不是双击编辑的控件
+     * 控件选择状态监听
+     */
+    private ObjectProperty<Callback<Integer, ObservableValue<Boolean>>> selectedStateCallback =
+            new SimpleObjectProperty<Callback<Integer, ObservableValue<Boolean>>>(
+                    this, "selectedStateCallback");
+
+    public final ObjectProperty<Callback<Integer, ObservableValue<Boolean>>> selectedStateCallbackProperty() {
+        return selectedStateCallback;
+    }
+
+    public final void setSelectedStateCallback(Callback<Integer, ObservableValue<Boolean>> value) {
+        selectedStateCallbackProperty().set(value);
+    }
+
+    public final Callback<Integer, ObservableValue<Boolean>> getSelectedStateCallback() {
+        return selectedStateCallbackProperty().get();
+    }
+
+
+    /**
+     * 直接在TableView上显示的控件
      *
      * @param builder
      */
     public GenericChoiceTreeTableCell(ChoiceNodeBuilder<S, T> builder) {
         this.builder = builder;
+
     }
 
     /**
@@ -51,20 +79,11 @@ public class GenericChoiceTreeTableCell<S extends Item, T> extends JFXTreeTableC
             builder.validateValue();
             commitEdit((T) builder.getValue());
         } catch (Exception ex) {
-            //Most of the time we don't mind if there is a parse exception as it
-            //indicates duff user data but in the case where we are losing focus
-            //it means the user has clicked away with bad data in the cell. In that
-            //situation we want to just cancel the editing and show them the old
-            //value.
             if (losingFocus) {
                 cancelEdit();
             }
         }
 
-    }
-
-    private void setValue(T t) {
-        setItem(t);
     }
 
     /**
@@ -75,57 +94,6 @@ public class GenericChoiceTreeTableCell<S extends Item, T> extends JFXTreeTableC
     }
 
     @Override
-    public void startEdit() {
-        System.out.println("startEdit");
-        if (node == null) {
-            createNode();
-        }
-
-        if (isEditable() && checkGroupedColumn()) {
-            super.startEdit();
-        }
-
-        setGraphic(node.content());
-        builder.setValue(getValue());
-        setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-    }
-
-    @Override
-    public void cancelEdit() {
-        super.cancelEdit();
-        builder.cancelEdit();
-        setGraphic(node.content());
-        setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-    }
-
-    /**
-     * only allows editing for items that are not grouped
-     *
-     * @return whether the item is grouped or not
-     */
-    private boolean checkGroupedColumn() {
-        boolean allowEdit = true;
-        if (getTreeTableRow().getTreeItem() != null) {
-
-            Object rowObject = getTreeTableRow().getTreeItem().getValue();
-
-            if (rowObject instanceof RecursiveTreeObject && rowObject.getClass() == RecursiveTreeObject.class) {
-                allowEdit = false;
-            } else {
-                // check grouped columns in the tableview
-                if (getTableColumn() instanceof JFXTreeTableColumn && ((JFXTreeTableColumn) getTableColumn()).isGrouped()) {
-                    // make sure that the object is a direct child to a group node
-                    if (getTreeTableRow().getTreeItem().getParent() != null &&
-                            getTreeTableRow().getTreeItem().getParent().getValue().getClass() == RecursiveTreeObject.class) {
-                        allowEdit = false;
-                    }
-                }
-            }
-        }
-        return allowEdit;
-    }
-
-    @Override
     public void updateItem(T item, boolean empty) {
         super.updateItem(item, empty);
 
@@ -133,20 +101,27 @@ public class GenericChoiceTreeTableCell<S extends Item, T> extends JFXTreeTableC
             setText(null);
             setGraphic(null);
         } else {
-
-            if (null == node) {
+            // 直接显示控件
+            if(null == node){
                 createNode();
             }
 
-            if (isEditing() && checkGroupedColumn()) {
-                setGraphic(node.content());
-                setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-                builder.updateItem(item, empty);
-            } else {
-                setGraphic(node.content());
-                setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-                setText(null);
+            setGraphic(node.content());
+
+            if (booleanProperty instanceof BooleanProperty) {
+                node.selectedProperty().unbindBidirectional((BooleanProperty) booleanProperty);
             }
+
+            ObservableValue<?> obsValue = getSelectedProperty();
+            if (obsValue instanceof BooleanProperty) {
+                booleanProperty = (ObservableValue<Boolean>) obsValue;
+                node.selectedProperty().bindBidirectional((BooleanProperty) booleanProperty);
+            }
+
+            node.disableProperty().bind(Bindings.not(
+                    getTreeTableView().editableProperty().and(
+                            getTableColumn().editableProperty()).and(editableProperty())
+            ));
         }
     }
 
@@ -184,8 +159,6 @@ public class GenericChoiceTreeTableCell<S extends Item, T> extends JFXTreeTableC
         };
 
         node = builder.createNode(getValue(), keyEventsHandler, focusChangeListener);
-        node.setEditable(getTreeTableView().isEditable());
-        node.setDisable(!getTreeTableView().isEditable());
     }
 
     /**
@@ -231,6 +204,12 @@ public class GenericChoiceTreeTableCell<S extends Item, T> extends JFXTreeTableC
             }
             return columns;
         }
+    }
+
+    private ObservableValue<?> getSelectedProperty() {
+        return getSelectedStateCallback() != null ?
+                getSelectedStateCallback().call(getIndex()) :
+                getTableColumn().getCellObservableValue(getIndex());
     }
 
 }

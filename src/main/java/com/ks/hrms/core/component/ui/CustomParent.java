@@ -51,6 +51,9 @@ public interface CustomParent<T> {
      */
     void setBreakable(boolean b);
     SimpleBooleanProperty breakableProperty();
+
+    void setSelected(boolean b);
+    SimpleBooleanProperty selectedProperty();
     /**
      * 返回自定义组件
      * @return

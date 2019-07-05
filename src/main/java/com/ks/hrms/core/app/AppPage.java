@@ -6,6 +6,10 @@ public interface AppPage {
 
     AppPage getLast();
 
+    void setNext(AppPage page);
+
+    void setLast(AppPage page);
+
     boolean hasNext();
 
     boolean hasLast();

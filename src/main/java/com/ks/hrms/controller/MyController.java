@@ -85,9 +85,9 @@ public class MyController implements Initializable {
         TitledPane t = new TitledPane();
         t.setText("租户管理");
         ListView<AppMenuItem> menus = new ListView<>();
-        menus.getItems().add(new AppMenuItem("租户资料维护", "tenant01", "com.ks.hrms.core.app.TestAppFunctionMain"));
-        menus.getItems().add(new AppMenuItem("租户资料审核", "tenant02", "com.ks.hrms.core.app.TestAppFunctionMain2"));
-        menus.getItems().add(new AppMenuItem("租户资料取消审核", "tenant03", "com.ks.hrms.core.app.TestAppFunctionMain"));
+        menus.getItems().add(new AppMenuItem("租户资料维护", "tenant01", "com.ks.hrms.core.app.TestAppFunction"));
+        menus.getItems().add(new AppMenuItem("租户资料审核", "tenant02", "com.ks.hrms.core.app.TestAppFunction2"));
+        menus.getItems().add(new AppMenuItem("租户资料取消审核", "tenant03", "com.ks.hrms.core.app.TestAppFunction"));
         menus.setOnMouseClicked(menuHandler);
         t.setContent(menus);
         return t;
@@ -97,9 +97,9 @@ public class MyController implements Initializable {
         TitledPane t = new TitledPane();
         ListView<AppMenuItem> menus = new ListView<>();
         t.setText("财务管理");
-        menus.getItems().add(new AppMenuItem("财务信息生成", "createrent", "com.ks.hrms.core.app.TestAppFunctionMain"));
-        menus.getItems().add(new AppMenuItem("凭证列表", "rentlist", "com.ks.hrms.core.app.TestAppFunctionMain"));
-        menus.getItems().add(new AppMenuItem("凭证资料维护", "rent", "com.ks.hrms.core.app.TestAppFunctionMain"));
+        menus.getItems().add(new AppMenuItem("财务信息生成", "createrent", "com.ks.hrms.core.app.TestAppFunction"));
+        menus.getItems().add(new AppMenuItem("凭证列表", "rentlist", "com.ks.hrms.core.app.TestAppFunction"));
+        menus.getItems().add(new AppMenuItem("凭证资料维护", "rent", "com.ks.hrms.core.app.TestAppFunction"));
         menus.setOnMouseClicked(menuHandler);
         t.setContent(menus);
         return t;
