@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class DoUpdateContext extends DoSystemContext implements UpdateContext {
+public class DoUpdateContext extends DoSystemContext implements DoUpdate {
 
     private boolean shouldUpdate;
     private List<String> messages;

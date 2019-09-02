@@ -63,6 +63,7 @@ public class AppMenuAdapter {
         }
 
         private Task<ObservableList<AppMenuItem>> generateTask(){
+
             return new Task<ObservableList<AppMenuItem>>() {
 
                 FilteredList<AppMenuItem> generateFilteredList(ObservableList<AppMenuItem> list){
@@ -72,6 +73,7 @@ public class AppMenuAdapter {
                         if(Utils.isEmpty(str)){
                             return false;
                         }
+
                         if (item.getMenuName().contains(str) || item.getFunctionId().contains(str)) {
                             return true;
                         }

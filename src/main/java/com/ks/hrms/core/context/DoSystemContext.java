@@ -4,9 +4,9 @@ import com.ks.hrms.dao.SystemDao;
 import javafx.beans.property.SimpleStringProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class DoSystemContext implements SystemContext {
+public class DoSystemContext {
 
-    static final String DEF_VER  = "1.0.1";
+    static final String DEF_VER = "1.0.1";
 
     private SimpleStringProperty ver = new SimpleStringProperty(DEF_VER);
     private SimpleStringProperty systemName = new SimpleStringProperty();
@@ -19,7 +19,7 @@ public class DoSystemContext implements SystemContext {
 
     }
 
-    public void initSystem(){
+    public void initSystem() {
         info = dao.getSysInfo();
         systemName.set(info.getCompanyName());
         ver.set(info.getVer());
@@ -30,7 +30,6 @@ public class DoSystemContext implements SystemContext {
         return ver.get();
     }
 
-    @Override
     public SimpleStringProperty verProperty() {
         return ver;
     }
@@ -44,7 +43,6 @@ public class DoSystemContext implements SystemContext {
         return systemName.get();
     }
 
-    @Override
     public SimpleStringProperty systemNameProperty() {
         return systemName;
     }
@@ -58,7 +56,6 @@ public class DoSystemContext implements SystemContext {
         return about.get();
     }
 
-    @Override
     public SimpleStringProperty aboutProperty() {
         return about;
     }
@@ -77,7 +74,7 @@ public class DoSystemContext implements SystemContext {
         return ver.compareTo(this.ver.get()) > 0;
     }
 
-    public void updateSystemInfo(){
+    public void updateSystemInfo() {
         dao.update(info);
     }
 }

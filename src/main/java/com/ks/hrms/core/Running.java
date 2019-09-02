@@ -1,7 +1,7 @@
 package com.ks.hrms.core;
 
 import com.jfoenix.controls.JFXDecorator;
-import com.ks.hrms.controller.MyController;
+import com.ks.hrms.controller.MainController;
 import com.ks.hrms.core.component.CustomStyleClass;
 import com.ks.hrms.core.context.AbstractAppFunctionContext;
 import com.ks.hrms.core.context.DoSystemContext;
@@ -9,10 +9,7 @@ import com.ks.hrms.core.context.HRMSAppFunctionContext;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.effect.DropShadow;
 import javafx.stage.Stage;
-
-import java.text.DateFormat;
 
 public class Running extends Application {
 
@@ -22,7 +19,7 @@ public class Running extends Application {
 
         DoSystemContext systemContext = HRMSAppFunctionContext.getInstance();
 
-        MyController c = new MyController();
+        MainController c = new MainController();
         Parent p = AbstractAppFunctionContext.loadFXML("main.fxml",c);
         primaryStage.titleProperty().bind(systemContext.systemNameProperty());
 

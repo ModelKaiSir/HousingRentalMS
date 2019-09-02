@@ -82,6 +82,7 @@ public class FreeForm extends AbstractForm {
         for (ColumnConstraints column : contentPane.getColumnConstraints()) {
             column.setPrefWidth(GridPane.USE_COMPUTED_SIZE);
         }
+
         ScrollPane sp = new ScrollPane(contentPane);
         sp.setFitToWidth(true);
         sp.setFitToHeight(true);
