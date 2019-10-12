@@ -1,43 +1,45 @@
 package com.ks.hrms.core.component.form;
 
+import com.ks.hrms.core.component.FormField;
 import com.ks.hrms.core.component.FormFieldFactory;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.layout.BorderPane;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Data Form
+ *
  * @author QiuKai
  */
-public abstract class AbstractForm extends BorderPane implements DataForm<DataItem> {
+public abstract class AbstractForm extends Group {
 
-    private SimpleBooleanProperty readOnly = new SimpleBooleanProperty(false);
-
-    protected FormFieldFactory fieldFactory;
+    protected SimpleBooleanProperty readOnly = new SimpleBooleanProperty(false);
+    protected SimpleBooleanProperty editable = new SimpleBooleanProperty(false);
+    protected SimpleStringProperty caption = new SimpleStringProperty();
     protected Pos pos;
 
-    /**
-     * 创建内容
-     * @return
-     */
-    protected abstract Parent generateContent();
-    /**
-     * before GenerateContent
-     * @return
-     */
-    protected abstract void beforeGenerateContent();
-    /**
-     * after GenerateContent
-     * @return
-     */
-    protected abstract void afterGenerateContent();
+    protected FormFieldFactory factory;
 
-    public final <T extends AbstractForm> T init(){
-        beforeGenerateContent();
-        Parent p = generateContent();
-        afterGenerateContent();
-        return (T) this;
+    /**
+     * 构建内容
+     *
+     * @return
+     */
+    abstract Parent generateContent();
+
+    public AbstractForm(ArrayList<FormField> formFields, Pos pos) {
+        factory = new FormFieldFactory();
+        factory.addFormFields(formFields);
+        factory.init();
+        Parent parent = generateContent();
+        getChildren().add(parent);
+        this.pos = pos;
     }
 
     public boolean isReadOnly() {
@@ -52,4 +54,39 @@ public abstract class AbstractForm extends BorderPane implements DataForm<DataIt
         this.readOnly.set(readOnly);
     }
 
+    public boolean isEditable() {
+        return editable.get();
+    }
+
+    public SimpleBooleanProperty editableProperty() {
+        return editable;
+    }
+
+    public void setEditable(boolean editable) {
+        this.editable.set(editable);
+    }
+
+    public FormFieldFactory getFormFieldFactory() {
+        return factory;
+    }
+
+    public Pos getPos() {
+        return pos;
+    }
+
+    public void setPos(Pos pos) {
+        this.pos = pos;
+    }
+
+    public String getCaption() {
+        return caption.get();
+    }
+
+    public SimpleStringProperty captionProperty() {
+        return caption;
+    }
+
+    public void setCaption(String caption) {
+        this.caption.set(caption);
+    }
 }

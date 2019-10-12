@@ -9,17 +9,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class DoUpdateContext extends DoSystemContext implements DoUpdate {
+public abstract class DoUpdateContext extends DoSystemContext {
+
+    public static final String TITLE = "更新日志";
 
     private boolean shouldUpdate;
     private List<String> messages;
+
     @Autowired
     private List<SystemUpdate> updates;
 
     private void showMessage(String headerText){
+
         //显示更新日志
         Alert dialog = new Alert(Alert.AlertType.INFORMATION);
-        dialog.setTitle("更新日志");
+        dialog.setTitle(TITLE);
         dialog.setHeaderText(headerText);
         dialog.setContentText((messages.stream().map(i ->{
             return i+"\r\n";
@@ -31,6 +35,7 @@ public class DoUpdateContext extends DoSystemContext implements DoUpdate {
 
     @Override
     public void update() {
+
         messages = new ArrayList<>();
         List<SystemUpdate> updates_sort = updates.stream().sorted((a,b) ->{
             return b.getVer().compareTo(a.getVer());
@@ -40,17 +45,22 @@ public class DoUpdateContext extends DoSystemContext implements DoUpdate {
         int j = 0;
 
         for (SystemUpdate update:updates_sort){
+
             if(checkVer(update.getVer())){
+
                 if(update instanceof UpdateLog){
                     String key = update.getDateTimeStr()+" 版本："+update.getVer();
                     if(j==0){
-                        setVer(update.getVer());
+                        // change Ver
+                        ver.set(update.getVer());
+
                         headerText = "<<<"+key+">>>";
                         messages.addAll(((UpdateLog) update).getLogs());
                     }else{
                         messages.add("\r\n-----"+key+"-----\r\n");
                         messages.addAll(((UpdateLog) update).getLogs());
                     }
+
                     j++;
                 }
 
@@ -61,7 +71,6 @@ public class DoUpdateContext extends DoSystemContext implements DoUpdate {
 
         if(shouldUpdate){
             showMessage(headerText);
-            updateSystemInfo();
         }
     }
 }

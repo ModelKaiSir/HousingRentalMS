@@ -7,6 +7,11 @@
     -fx-border-radius: 50%;
     -fx-background-radius: 50%;
 }
+
+.test-bor{
+    -fx-border-color: red;
+}
+
 .custom-btn-color-success{
     -fx-text-fill: white;
     -fx-background-color: #38b03f;
@@ -141,7 +146,7 @@ animated-option-sub-cl{
 }
 
 .hrms_root_background{
-    -fx-background-color: #eef7f2;
+    -fx-background-color: #DDDDDD;
 }
 
 .custom_tool_bar{
@@ -167,7 +172,7 @@ animated-option-sub-cl{
 }
 /* jfx tab pane custom */
 .jfx-tab-pane{
-    -fx_tab-pane-color: #eef7f2;
+    -fx_tab-pane-color: #DDDDDD;
 }
 .jfx-tab-pane .hrms_root_background{
     -fx-background-color: -fx_tab-pane-color;

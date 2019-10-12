@@ -3,7 +3,7 @@ package com.ks.hrms.core.component.ui;
 import com.jfoenix.controls.*;
 import com.ks.hrms.core.component.CustomStyleClass;
 import com.ks.hrms.core.component.FormField;
-import com.ks.hrms.core.context.HRMSAppFunctionContext;
+import com.ks.hrms.core.context.AppFunctionContext;
 import com.ks.hrms.dao.SystemDao;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -158,7 +158,7 @@ public class CustomComponentFactory {
     }
 
     public static void reloadComBoBox(CustomComboBox comBoBox, String sql) {
-        SystemDao dao = HRMSAppFunctionContext.getInstance().getBean(SystemDao.class);
+        SystemDao dao = AppFunctionContext.getInstance().getBean(SystemDao.class);
         reloadComBoBox(comBoBox, dao.getItemList(sql));
     }
 

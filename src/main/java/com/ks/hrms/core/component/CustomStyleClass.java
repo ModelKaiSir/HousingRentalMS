@@ -15,6 +15,7 @@ public class CustomStyleClass {
     public static final String CUSTOM_TOOL_BAR = "custom_tool_bar";
 
     public static final String CUSTOM_TOOL_BAR_BACKGROUND = "custom_tool_bar_bg";
+
     /**
      * 主界面背景色
      */

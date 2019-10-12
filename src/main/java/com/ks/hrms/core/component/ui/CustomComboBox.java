@@ -28,8 +28,7 @@ public class CustomComboBox extends AbstractCustomParent<String> implements Abst
     public CustomComboBox(String id, String caption, String initValue) {
         super.setFieldId(id);
         super.setCaption(caption);
-        if(null!=initValue)
-        {
+        if(null!=initValue){
             initValueProperty.set(new Label(initValue));
         }
     }

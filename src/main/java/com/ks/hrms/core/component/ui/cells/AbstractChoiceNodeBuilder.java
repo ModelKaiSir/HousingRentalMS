@@ -1,8 +1,6 @@
 package com.ks.hrms.core.component.ui.cells;
 
 import com.ks.hrms.core.component.FormField;
-import com.ks.hrms.core.component.form.DataItem;
-import com.ks.hrms.core.component.ui.AbstractCustomParent;
 
 public abstract class AbstractChoiceNodeBuilder<T> implements ChoiceNodeBuilder<DataItem,T> {
 

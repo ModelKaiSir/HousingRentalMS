@@ -1,47 +1,39 @@
 package com.ks.hrms.core.component.form;
 
 import com.ks.hrms.core.component.FormField;
-import com.ks.hrms.core.component.FormFieldFactory;
 import com.ks.hrms.core.component.ui.AbstractCustomParent;
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.VPos;
 import javafx.scene.Parent;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 表单组件
+ *
  * @author QiuKai
  */
 public class FreeForm extends AbstractForm {
 
 
     private GridPane contentPane;
-    private Set<AbstractCustomParent> fieldSet;
+    private HashMap<String, AbstractCustomParent> fieldMap;
     private int row = 0, col = 0;
 
     private FreeForm(ArrayList<FormField> formFields) {
         this(null, formFields);
     }
 
-    private FreeForm(Pos pos,ArrayList<FormField> formFields) {
-        fieldFactory = new FormFieldFactory().addFormFields(formFields);
-        fieldFactory.init();
-        this.pos = pos;
+    private FreeForm(Pos pos, ArrayList<FormField> formFields) {
+        super(formFields, pos);
     }
 
-    @Override
     protected void beforeGenerateContent() {
         contentPane = new GridPane();
-        fieldSet = new HashSet<>();
+        fieldMap = new HashMap<>();
         contentPane.setVgap(25);
         contentPane.setHgap(5);
         contentPane.setPadding(new Insets(10, 0, 0, 10));
@@ -55,11 +47,15 @@ public class FreeForm extends AbstractForm {
     @Override
     public GridPane generateContent() {
 
-        for (Map.Entry<String, AbstractCustomParent> fieldEntry : fieldFactory.getFieldMap().entrySet()) {
+        beforeGenerateContent();
+
+        for (Map.Entry<String, AbstractCustomParent> fieldEntry : factory.getFieldMap().entrySet()) {
+
             AbstractCustomParent field = fieldEntry.getValue();
             Parent component = field.content();
             contentPane.add(component, col, row);
-            fieldSet.add(field);
+            fieldMap.put(fieldEntry.getKey(), fieldEntry.getValue());
+
             if (null != field.getPos()) {
                 GridPane.setHalignment(component, field.getPos().getHpos());
                 GridPane.setValignment(component, field.getPos().getVpos());
@@ -76,7 +72,6 @@ public class FreeForm extends AbstractForm {
         return contentPane;
     }
 
-    @Override
     protected void afterGenerateContent() {
         //自适应宽度
         for (ColumnConstraints column : contentPane.getColumnConstraints()) {
@@ -86,43 +81,21 @@ public class FreeForm extends AbstractForm {
         ScrollPane sp = new ScrollPane(contentPane);
         sp.setFitToWidth(true);
         sp.setFitToHeight(true);
-        setCenter(sp);
     }
 
-    public void readOnlyAble(){
-        this.readOnlyProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println("readOnly "+newValue);
-            fieldSet.forEach(i ->{
-                i.setEditable(!newValue);
-                i.setDisable(newValue);
-            });
-        });
+    public AbstractCustomParent getField(String key) {
+        return fieldMap.get(key);
     }
 
-    @Override
-    public void newItem() {
-        DataItem item = new DataItem(fieldFactory);
-    }
-
-    @Override
-    public void setItem(DataItem dataItem) {
-
-    }
-
-    @Override
-    public void update() {
-
-    }
-
-    public static FreeForm createFreeForm(ArrayList<FormField> formFields) {
-        FreeForm freeForm = new FreeForm(formFields).init();
-        freeForm.readOnlyAble();
+    public static FreeForm createFreeForm(String caption, ArrayList<FormField> formFields) {
+        FreeForm freeForm = new FreeForm(formFields);
+        freeForm.setCaption(caption);
         return freeForm;
     }
 
-    public static FreeForm createFreeForm(Pos pos, ArrayList<FormField> formFields) {
-        FreeForm freeForm = new FreeForm(pos, formFields).init();
-        freeForm.readOnlyAble();
+    public static FreeForm createFreeForm(Pos pos, String caption, ArrayList<FormField> formFields) {
+        FreeForm freeForm = new FreeForm(pos, formFields);
+        freeForm.setCaption(caption);
         return freeForm;
     }
 }

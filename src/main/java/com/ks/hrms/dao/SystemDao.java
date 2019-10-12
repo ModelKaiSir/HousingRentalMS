@@ -12,8 +12,8 @@ public class SystemDao extends BaseDao {
     static final String LOAD_SYS_INFO = "SELECT COMPANYNAME,VER,ABOUT FROM "+TABLE_NAME;
     static final String SAVE_SYS_INFO = "UPDATE "+TABLE_NAME+" SET COMPANYNAME = ?,VER = ?,ABOUT = ? WHERE ID = ?";
 
-    public SystemInfo getSysInfo(){
-        final SystemInfo info = new SystemInfo();
+    public SystemInfomation getSysInfo(){
+        final SystemInfomation info = new SystemInfomation();
         this.getTemplate().query(LOAD_SYS_INFO,resultSet -> {
                  info.setCompanyName(resultSet.getString(1));
                  info.setVer(resultSet.getString(2));
@@ -22,7 +22,7 @@ public class SystemDao extends BaseDao {
         return info;
     }
 
-    public void update(SystemInfo sysInfo){
+    public void update(SystemInfomation sysInfo){
         this.getTemplate().update(SAVE_SYS_INFO,sysInfo.getCompanyName(),sysInfo.getVer(),sysInfo.getAbout(),"SYSTEM");
     }
 
@@ -35,7 +35,7 @@ public class SystemDao extends BaseDao {
         return result;
     }
 
-    public static class SystemInfo{
+    public static class SystemInfomation {
 
         private String companyName;
         private String ver;

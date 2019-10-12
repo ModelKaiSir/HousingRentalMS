@@ -181,13 +181,18 @@ public abstract class AbstractCustomParent<T> implements CustomParent<T> {
      * 支持设置默认值 如 TextField等Control控件
      * @param <T>
      */
-    public interface InitValue<T>{
+    public interface InitValue<T> {
 
         /**
          * 默认值
          * @param initValue
          */
         void setInitValue(T initValue);
+
+        /**
+         * 返回默认值
+         * @return
+         */
         ObjectProperty<T> initValueProperty();
     }
 

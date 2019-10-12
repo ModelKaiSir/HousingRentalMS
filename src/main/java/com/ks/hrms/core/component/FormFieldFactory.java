@@ -1,16 +1,12 @@
 package com.ks.hrms.core.component;
 
 import com.jfoenix.controls.cells.editors.TextFieldEditorBuilder;
-import com.jfoenix.controls.cells.editors.base.EditorNodeBuilder;
 import com.jfoenix.controls.cells.editors.base.GenericEditableTreeTableCell;
-import com.jfoenix.controls.cells.editors.base.JFXTreeTableCell;
-import com.ks.hrms.core.component.form.DataItem;
+import com.ks.hrms.core.component.form.Item;
 import com.ks.hrms.core.component.ui.*;
 import com.ks.hrms.core.component.ui.cells.*;
 import com.ks.hrms.utils.Utils;
 import javafx.scene.control.TreeTableCell;
-import javafx.scene.control.cell.CheckBoxTableCell;
-import javafx.scene.control.cell.CheckBoxTreeCell;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -139,7 +135,7 @@ public class FormFieldFactory {
         switch (formField.getType()) {
             case FormField.ATTRIBUTE_TYPE_DATE:
             case FormField.ATTRIBUTE_TYPE_DATETIME:
-                return new GenericChoiceTreeTableCell<DataItem,String>(new DatePickerBuilder(formField));
+                return null;
             case FormField.ATTRIBUTE_TYPE_BUTTON:
                 return new GenericChoiceTreeTableCell(new ButtonBuilder(formField));
             case FormField.GROUP_CHECKBOX:

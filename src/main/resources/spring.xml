@@ -19,7 +19,7 @@
     <context:component-scan base-package="com.ks.hrms.dao"></context:component-scan>
     <context:component-scan base-package="com.ks.hrms.core.update"></context:component-scan>
     <!--appFunctionContext-->
-    <bean id="appFunctionContext" class="com.ks.hrms.core.context.HRMSAppFunctionContext"></bean>
+    <bean id="appFunctionContext" class="com.ks.hrms.core.context.AppFunctionContext"></bean>
     <!-- dataSource-->
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
         <property name="driverClassName" value="${sqliteDriver}"></property>
