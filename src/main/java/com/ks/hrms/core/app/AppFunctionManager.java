@@ -1,7 +1,7 @@
 package com.ks.hrms.core.app;
 
 import com.ks.hrms.controller.AppMenuItem;
-import com.ks.hrms.core.context.AppFunctionContext;
+import javafx.util.Callback;
 
 public class AppFunctionManager {
 
@@ -15,10 +15,12 @@ public class AppFunctionManager {
         String menuName = menuItem.getMenuName();
         String classPath = menuItem.getClassPath();
 
-        Function function = generateObject(classPath, Function.class);
+        AbstractAppFunction function = generateObject(classPath, AbstractAppFunction.class);
+
         function.init();
-        function.setCaption(menuName);
-        return (AbstractAppFunction) function;
+        function.setText(menuName);
+        function.onOpen(null);
+        return function;
     }
 
     private <T> T generateObject(String classPath, Class<T> clazz) {

@@ -1,13 +1,12 @@
 package com.ks.hrms.core.app;
 
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.scene.control.TabPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.Parent;
+import javafx.scene.layout.AnchorPane;
+import javafx.util.Callback;
 
-public abstract class AbstractAppFunctionLayout extends BorderPane implements FunctionComponent, FunctionLayout {
+public abstract class AbstractAppFunctionLayout extends AnchorPane implements FunctionComponent, FunctionLayout {
 
-    private FunctionToolbar functionToolbar;
     private SimpleObjectProperty<FunctionComponent> focusedComponent = new SimpleObjectProperty<>();
 
     public AbstractAppFunctionLayout() {
@@ -16,13 +15,14 @@ public abstract class AbstractAppFunctionLayout extends BorderPane implements Fu
 
     @Override
     public void init() {
-        setCenter((TabPane) focusedComponent.get());
-        setTop((HBox) functionToolbar);
     }
 
     @Override
-    public void setFocusedFunctionComponent(FunctionComponent component) {
-        focusedComponent.set(component);
+    public void setFocusedFunctionComponent(FunctionComponent c) {
+        getChildren().removeAll();
+        focusedComponent.set(c);
+        getChildren().add((Parent) c);
+        fitToParent((Parent) c);
     }
 
     @Override
@@ -31,12 +31,24 @@ public abstract class AbstractAppFunctionLayout extends BorderPane implements Fu
     }
 
     @Override
-    public void setFunctionToolbar(FunctionToolbar functionToolbar) {
-        this.functionToolbar = functionToolbar;
+    public void close() {
+
     }
 
     @Override
-    public void setCaption(String caption) {
+    public void onClose(Callback call) {
 
+    }
+
+    @Override
+    public void onOpen(Callback call) {
+
+    }
+
+    protected void fitToParent(Parent parent) {
+        AnchorPane.setTopAnchor(parent, 0.0);
+        AnchorPane.setBottomAnchor(parent, 0.0);
+        AnchorPane.setLeftAnchor(parent, 0.0);
+        AnchorPane.setRightAnchor(parent, 0.0);
     }
 }

@@ -4,5 +4,5 @@ public interface FunctionNavigator extends FunctionComponent{
 
     void setFunction(Function function);
 
-    ToolBar getToolbar();
+    void setFunctionRequestListener(FunctionRequestListener listener);
 }

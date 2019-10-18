@@ -134,14 +134,7 @@ public class CustomComponentFactory {
     public static JFXComboBox<Label> generateComBox(CustomComboBox comBoBox) {
         JFXComboBox<Label> box = new JFXComboBox<>();
         box.setCellFactory(param -> {
-
             ComboBoxListCell<Label> listCell = new ComboBoxListCell<Label>();
-
-            BackgroundFill fill = new BackgroundFill(Color.web("#03B8CF"), new CornerRadii(3), new Insets(1, 1, 1, 1));
-            Background background = new Background(fill);
-            listCell.setBackground(background);
-            listCell.setPadding(new Insets(15, 0, 15, 0));
-            listCell.setEffect(new DropShadow(5, Color.BLACK));
             listCell.setConverter(defComboBoxConverter);
             return listCell;
         });

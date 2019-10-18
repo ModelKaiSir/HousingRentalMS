@@ -1,10 +1,15 @@
 package com.ks.hrms.test;
 
-import com.ks.hrms.core.app.DefaultAppFunction;
+import com.ks.hrms.core.app.ButtonType;
 import com.ks.hrms.core.app.DefaultAppFunctionMain;
+import com.ks.hrms.core.app.ToolBar;
 import com.ks.hrms.core.component.FormField;
 import com.ks.hrms.core.component.form.FreeForm;
+import com.ks.hrms.core.component.form.TableForm;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
+import javafx.util.Callback;
 
 import java.util.ArrayList;
 
@@ -19,13 +24,27 @@ public class TestFunctionMain extends DefaultAppFunctionMain {
         super.init();
         initCustomButton();
         formFields = createFormFields();
+
         freeForm = FreeForm.createFreeForm("用户资料", formFields);
         addComponent(0, 0, 0, freeForm);
         draw();
     }
 
     protected void initCustomButton() {
-        this.toolBar.setCustomButtons(createCustomButton(FontAwesomeIcon.SIGN_OUT,"测试自定义"));
+        this.toolbar.setCustomButtons(createCustomButton(FontAwesomeIcon.SIGN_OUT,"测试自定义"));
+        this.toolbar.setCustomButtonClickListener(id ->{
+            System.out.println(id);
+        });
+    }
+
+    @Override
+    public void onClickButton(ButtonType type) {
+        switch (type){
+            case EXIT:
+                System.out.println("点击了EXIT");
+                close();
+                break;
+        }
     }
 
     private String sexType() {
@@ -50,11 +69,16 @@ public class TestFunctionMain extends DefaultAppFunctionMain {
     protected ArrayList<FormField> createFormFields() {
 
         ArrayList<FormField> formFields = new ArrayList<>();
-        formFields.add(new FormField("xf_user", "用户名", FormField.TEXTFIELD));
-        formFields.add(new FormField("xf_password", "密码", FormField.TEXTFIELD));
-        formFields.add(new FormField("xf_sex", "性别", FormField.RADIO_BUTTON + sexType()));
-        formFields.add(new FormField("xf_phone", "手机号", FormField.TEXTFIELD));
-        formFields.add(new FormField("xf_userGroup", "用户组", FormField.COMBOBOX + userGroupType()));
+        formFields.add(new FormField("userName", "用户名", FormField.TEXTFIELD));
+        formFields.add(new FormField("sex", "性别", FormField.RADIO_BUTTON + sexType()));
+        formFields.add(new FormField("phone", "手机号", FormField.TEXTFIELD));
+        formFields.add(new FormField("userGroup", "用户组", FormField.COMBOBOX + userGroupType()));
         return formFields;
+    }
+
+    @Override
+    public void onClose(Callback call) {
+        super.onClose(call);
+        System.out.println("被关闭了");
     }
 }

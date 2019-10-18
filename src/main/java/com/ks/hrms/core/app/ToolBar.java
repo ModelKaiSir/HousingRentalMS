@@ -21,7 +21,7 @@ public interface ToolBar {
 
     void setAppButtons(ButtonType... appButtons);
 
-    void setToolbarIds(ButtonType[] types);
+    void setToolbarTypes(ButtonType[] types);
 
     HashMap<String, Button> getCustomButtonMap();
 
@@ -35,13 +35,15 @@ public interface ToolBar {
 
     void setButtonClickListener(ButtonClickListener listener);
 
-    public static abstract interface CustomButtonClickListener extends EventHandler<ActionEvent> {
+    void draw();
+
+    public static abstract interface CustomButtonClickListener{
 
         void onCustomClickButton(String id);
 
     }
 
-    public static abstract interface ButtonClickListener extends EventHandler<ActionEvent> {
+    public static abstract interface ButtonClickListener {
 
         void onClickButton(ButtonType type);
 

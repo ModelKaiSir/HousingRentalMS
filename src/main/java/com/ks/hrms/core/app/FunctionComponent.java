@@ -1,5 +1,7 @@
 package com.ks.hrms.core.app;
 
+import javafx.util.Callback;
+
 import javax.xml.soap.Node;
 import java.security.acl.Group;
 
@@ -10,14 +12,14 @@ public interface FunctionComponent {
      */
     void init();
 
-    void setCaption(String caption);
-
-    void setFunctionRequestListener(FunctionRequestListener listener);
-
     void close();
 
-    public static interface FunctionRequestListener {
+    void onClose(Callback call);
 
-        void request(ButtonType type);
+    void onOpen(Callback call);
+
+    interface FunctionRequestListener{
+
+        void request(FunctionComponent component, ButtonType type);
     }
 }

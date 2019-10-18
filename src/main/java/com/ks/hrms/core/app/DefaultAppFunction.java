@@ -1,24 +1,40 @@
 package com.ks.hrms.core.app;
 
-public class DefaultAppFunction extends AbstractAppFunction {
+import javafx.util.Callback;
+
+public class DefaultAppFunction extends AbstractAppFunction implements FunctionComponent.FunctionRequestListener {
 
     @Override
-    FunctionToolbar createToolbar() {
-        return new DefaultAppFunctionToolbar();
-    }
-
-    @Override
-    public FunctionMain createMain() {
+    protected FunctionMain createFunctionMain() {
         return null;
     }
 
     @Override
-    public FunctionNavigator createNavigator() {
+    protected FunctionNavigator createFunctionNavigator() {
         return null;
     }
 
     @Override
-    public FunctionLayout createLayout() {
+    protected FunctionLayout createFunctionLayout() {
         return new DefaultAppFunctionLayout();
+    }
+
+    @Override
+    public void onClose(Callback call) {
+        System.out.println("被关闭了");
+    }
+
+    @Override
+    public void onOpen(Callback call) {
+        System.out.println("被打开了");
+    }
+
+    @Override
+    public void request(FunctionComponent component, ButtonType type) {
+
+        switch (type){
+            case NEW:
+                break;
+        }
     }
 }

@@ -33,7 +33,7 @@ public class FreeForm extends AbstractForm {
 
     protected void beforeGenerateContent() {
         contentPane = new GridPane();
-        fieldMap = new HashMap<>();
+        fieldMap = new HashMap<>(16);
         contentPane.setVgap(25);
         contentPane.setHgap(5);
         contentPane.setPadding(new Insets(10, 0, 0, 10));

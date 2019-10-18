@@ -2,15 +2,19 @@ package com.ks.hrms.core.component;
 
 import com.jfoenix.controls.cells.editors.TextFieldEditorBuilder;
 import com.jfoenix.controls.cells.editors.base.GenericEditableTreeTableCell;
-import com.ks.hrms.core.component.form.Item;
 import com.ks.hrms.core.component.ui.*;
 import com.ks.hrms.core.component.ui.cells.*;
 import com.ks.hrms.utils.Utils;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TreeTableCell;
+import javafx.scene.control.cell.CheckBoxTableCell;
+import javafx.scene.control.cell.ComboBoxTableCell;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.util.Callback;
+import javafx.util.StringConverter;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.*;
 
 public class FormFieldFactory {
 
@@ -144,6 +148,55 @@ public class FormFieldFactory {
                 return new GenericEditableTreeTableCell(new ComboBoxEditBuilder(formField));
             default:
                 return new GenericEditableTreeTableCell(new TextFieldEditorBuilder());
+        }
+    }
+
+    public Callback<TableColumn<Object, Object>, TableCell<Object, Object>> generateColumnCellFactory(TableColumn col, FormField formField) {
+
+        class BuilderUtil {
+
+            final StringConverter<Object> objConverter = new StringConverter<Object>() {
+                @Override
+                public String toString(Object t) {
+                    return t == null ? null : t.toString();
+                }
+
+                @Override
+                public Object fromString(String string) {
+                    return string;
+                }
+            };
+
+            String[] converterItemList(List<FormField.FormFieldAttribute> attributes) {
+                Optional<List<FormField.FormFieldAttribute>> optional = Optional.<List<FormField.FormFieldAttribute>>of(
+                        attributes
+                );
+
+                return optional.map(input -> {
+                    String[] result = new String[input.size()];
+                    for (int i = 0; i < input.size(); i++) {
+                        result[i] = input.get(i).getValue();
+                    }
+                    return result;
+                }).get();
+
+
+            }
+        }
+
+        BuilderUtil util = new BuilderUtil();
+
+        switch (formField.getType()) {
+            case FormField.ATTRIBUTE_TYPE_DATE:
+            case FormField.ATTRIBUTE_TYPE_DATETIME:
+                return null;
+            case FormField.ATTRIBUTE_TYPE_BUTTON:
+            case FormField.GROUP_CHECKBOX:
+                return CheckBoxTableCell.forTableColumn(col);
+            case FormField.GROUP_COMBOBOX:
+                return ComboBoxTableCell.forTableColumn(formField.getItemList());
+            default:
+                return TextFieldTableCell.forTableColumn(util.objConverter);
         }
     }
 

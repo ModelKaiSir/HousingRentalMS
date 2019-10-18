@@ -8,6 +8,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.layout.AnchorPane;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.List;
  *
  * @author QiuKai
  */
-public abstract class AbstractForm extends Group {
+public abstract class AbstractForm extends AnchorPane {
 
     protected SimpleBooleanProperty readOnly = new SimpleBooleanProperty(false);
     protected SimpleBooleanProperty editable = new SimpleBooleanProperty(false);
@@ -39,6 +40,7 @@ public abstract class AbstractForm extends Group {
         factory.init();
         Parent parent = generateContent();
         getChildren().add(parent);
+        fitToParent(parent);
         this.pos = pos;
     }
 
@@ -88,5 +90,12 @@ public abstract class AbstractForm extends Group {
 
     public void setCaption(String caption) {
         this.caption.set(caption);
+    }
+
+    protected void fitToParent(Parent parent) {
+        AnchorPane.setTopAnchor(parent, 0.0);
+        AnchorPane.setBottomAnchor(parent, 0.0);
+        AnchorPane.setLeftAnchor(parent, 0.0);
+        AnchorPane.setRightAnchor(parent, 0.0);
     }
 }

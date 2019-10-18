@@ -8,6 +8,4 @@ public interface FunctionLayout extends FunctionComponent{
     FunctionComponent getFocusedFunctionComponent();
 
     void setFocusedFunctionComponent(FunctionComponent component);
-
-    void setFunctionToolbar(FunctionToolbar functionToolbar);
 }

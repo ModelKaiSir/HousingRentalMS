@@ -1,8 +1,7 @@
 package com.ks.hrms.core.app;
 
-import de.jensd.fx.glyphs.GlyphIcons;
-import de.jensd.fx.glyphs.GlyphsDude;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
@@ -11,30 +10,39 @@ import java.util.*;
 
 public abstract class AbstractToolbar extends HBox implements ToolBar {
 
+    public static final String STYLE_FUNCTION_TOOLBAR = "function_toolbar";
+    public static final Insets PADDING = new Insets(3, 5, 1, 5);
     public static final Insets MARGIN = new Insets(0, 0, 0, 8);
 
-    static ButtonType[] disableButtonType = {
-            ButtonType.NEW,
-            ButtonType.MODIFY,
-            ButtonType.VIEW
-    };
+    static final double MIN_HEIGHT = 30;
 
     /**
      * 自定义按钮
      */
-    private HashMap<String, Button> customButtonMap;
+    protected HashMap<String, Button> customButtonMap;
 
     /**
      * 系统按钮
      */
-    private HashMap<ButtonType, Button> appButtonMap;
+    protected HashMap<ButtonType, Button> appButtonMap;
 
-    private String[] customButtonIds;
-    private ButtonType[] appButtonIds;
-    private CustomButtonClickListener customButtonClickListener;
-    private ButtonClickListener buttonClickListener;
+    protected String[] customButtonIds;
+    protected ButtonType[] appButtonTypes;
 
-    private Button generateCustomButton(String[] iconConfig, String text) {
+    protected CustomButtonClickListener customButtonClickListener;
+    protected ButtonClickListener buttonClickListener;
+
+    public AbstractToolbar() {
+        super();
+        setMinHeight(MIN_HEIGHT);
+        setPrefHeight(USE_COMPUTED_SIZE);
+        setAlignment(Pos.BASELINE_RIGHT);
+        setPadding(PADDING);
+
+        getStyleClass().add(STYLE_FUNCTION_TOOLBAR);
+    }
+
+    protected Button generateCustomButton(String[] iconConfig, String text) {
 
         Text label = new Text(iconConfig[0]);
         label.getStyleClass().add("glyph-icon");
@@ -45,24 +53,27 @@ public abstract class AbstractToolbar extends HBox implements ToolBar {
         button.setUserData(text);
 
         button.setOnAction(event -> {
-            customButtonClickListener.onCustomClickButton((String) button.getUserData());
+            if (null != customButtonClickListener) {
+                customButtonClickListener.onCustomClickButton((String) button.getUserData());
+            }
         });
         return button;
     }
 
-    private void draw() {
+    @Override
+    public void draw() {
 
-        for (ButtonType type : appButtonIds) {
+        for (ButtonType type : appButtonTypes) {
             Button button = appButtonMap.get(type);
             getChildren().add(button);
             setMargin(button, MARGIN);
 
             //input CustomButton to EXIT next
-            if (type == ButtonType.EXIT) {
+            if (type == ButtonType.EXIT && null != customButtonIds) {
                 for (String cid : customButtonIds) {
                     Button customButton = customButtonMap.get(cid);
                     getChildren().add(customButton);
-                    setMargin(button, MARGIN);
+                    setMargin(customButton, MARGIN);
                 }
             }
         }
@@ -72,8 +83,7 @@ public abstract class AbstractToolbar extends HBox implements ToolBar {
     public void init() {
         customButtonMap = new HashMap<>(16);
         appButtonMap = new HashMap<>(16);
-        setAppButtons(appButtonIds);
-        draw();
+        setAppButtons(appButtonTypes);
     }
 
     @Override
@@ -100,10 +110,11 @@ public abstract class AbstractToolbar extends HBox implements ToolBar {
 
         if (null != appButtons) {
             for (ButtonType type : appButtons) {
-                Button button = ToolbarAppButtonFactory.generateButton(type);
+                Button button = generateButton(type);
                 button.setOnAction(event -> {
                     buttonClickListener.onClickButton(type);
                 });
+
                 appButtonMap.put(type, button);
             }
         }
@@ -111,8 +122,8 @@ public abstract class AbstractToolbar extends HBox implements ToolBar {
     }
 
     @Override
-    public void setToolbarIds(ButtonType[] types) {
-        appButtonIds = types;
+    public void setToolbarTypes(ButtonType[] types) {
+        appButtonTypes = types;
     }
 
     @Override
@@ -151,42 +162,5 @@ public abstract class AbstractToolbar extends HBox implements ToolBar {
         return customButtonMap;
     }
 
-    static class ToolbarAppButtonFactory {
-
-        public static Button generateButton(ButtonType type) {
-
-            switch (type) {
-                case EXIT:
-                    return newInstance("退出", type.getIcons(), type.getStyle());
-                case NEW:
-                    return newInstance("新增", type.getIcons(), type.getStyle());
-                case VIEW:
-                    return newInstance("查阅", type.getIcons(), type.getStyle());
-                case MODIFY:
-                    return newInstance("修改", type.getIcons(), type.getStyle());
-                case UPDATE:
-                    return newInstance("更新", type.getIcons(), type.getStyle());
-                case DELETE:
-                    return newInstance("删除", type.getIcons(), type.getStyle());
-                case UNDO:
-                    return newInstance("还原", type.getIcons(), type.getStyle());
-                case CLEAR:
-                    return newInstance("清除", type.getIcons(), type.getStyle());
-                case SEARCH:
-                    return newInstance("搜索", type.getIcons(), type.getStyle());
-                case SEARCH_PARAMETER:
-                    return newInstance("搜索条件", type.getIcons(), type.getStyle());
-
-            }
-
-            return null;
-        }
-
-        static Button newInstance(String text, GlyphIcons icons, String style) {
-            Button result = GlyphsDude.createIconButton(icons, text);
-            result.setStyle(style);
-            return result;
-        }
-
-    }
+    abstract Button generateButton(ButtonType type);
 }

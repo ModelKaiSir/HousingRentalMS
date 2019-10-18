@@ -3,6 +3,7 @@ package com.ks.hrms.core.app;
 import com.ks.hrms.core.component.CustomStyleClass;
 import com.ks.hrms.core.context.AppFunctionContext;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.cell.CheckBoxTableCell;
@@ -12,7 +13,7 @@ import javafx.scene.layout.BorderPane;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public abstract class AbstractAppFunction extends Tab implements Function, FunctionComponent, FunctionComponent.FunctionRequestListener {
+public abstract class AbstractAppFunction extends Tab implements Function, FunctionComponent {
 
     public static final String STYLESHEET = "UI/functionUI.css";
     public static final String STYLE_FUNCTION = "function";
@@ -20,7 +21,6 @@ public abstract class AbstractAppFunction extends Tab implements Function, Funct
     protected AppFunctionContext context = AppFunctionContext.getInstance();
 
     private FunctionLayout layout;
-    private FunctionToolbar toolbar;
     private FunctionMain main;
     private FunctionNavigator navigator;
 
@@ -30,24 +30,18 @@ public abstract class AbstractAppFunction extends Tab implements Function, Funct
     };
 
     public AbstractAppFunction() {
-
     }
 
     @Override
     public void init() {
 
         getStyleClass().add(STYLE_FUNCTION);
-        layout = createLayout();
-        toolbar = createToolbar();
-        main = createMain();
-        navigator = createNavigator();
-        initComponent(toolbar);
+        layout = createFunctionLayout();
+        navigator = createFunctionNavigator();
+        main = createFunctionMain();
+
         initComponent(main);
         initComponent(navigator);
-
-        if (null != toolbar) {
-            layout.setFunctionToolbar(toolbar);
-        }
 
         if (null != navigator) {
             layout.setFocusedFunctionComponent(navigator);
@@ -56,33 +50,26 @@ public abstract class AbstractAppFunction extends Tab implements Function, Funct
         }
 
         initComponent(layout);
-        setContent((BorderPane) layout);
+        setContent((Parent) layout);
         //
-        AnchorPane.setTopAnchor((BorderPane) layout, 0.0);
-        AnchorPane.setBottomAnchor((BorderPane) layout, 0.0);
-        AnchorPane.setLeftAnchor((BorderPane) layout, 0.0);
-        AnchorPane.setRightAnchor((BorderPane) layout, 0.0);
+        fitToParent((Parent) layout);
+
+        setOnClosed(event -> {
+            onClose(null);
+        });
     }
 
-    /**
-     * ToolBar
-     *
-     * @return
-     */
-    abstract FunctionToolbar createToolbar();
+    abstract FunctionMain createFunctionMain();
 
+    abstract FunctionNavigator createFunctionNavigator();
 
-    /**
-     * ToolBar
-     * @param type
-     */
-    @Override
-    public void request(ButtonType type) {
-        switch (type){
-            case EXIT:
-                // layout.getFocusedFunctionComponent()
-                break;
-        }
+    abstract FunctionLayout createFunctionLayout();
+
+    protected void fitToParent(Parent parent) {
+        AnchorPane.setTopAnchor(parent, 0.0);
+        AnchorPane.setBottomAnchor(parent, 0.0);
+        AnchorPane.setLeftAnchor(parent, 0.0);
+        AnchorPane.setRightAnchor(parent, 0.0);
     }
 
     private void initComponent(FunctionComponent component) {
@@ -93,7 +80,7 @@ public abstract class AbstractAppFunction extends Tab implements Function, Funct
 
             try {
                 for (Class c : setFunctions) {
-                    if(clazz.isAssignableFrom(c)){
+                    if (clazz.isAssignableFrom(c)) {
                         Method method = component.getClass().getMethod("setFunction", Function.class);
                         method.invoke(component, this);
                         break;
@@ -112,7 +99,7 @@ public abstract class AbstractAppFunction extends Tab implements Function, Funct
     }
 
     @Override
-    public FunctionMain getMain() {
+    public FunctionMain getFunctionMain() {
         return main;
     }
 
@@ -121,9 +108,13 @@ public abstract class AbstractAppFunction extends Tab implements Function, Funct
         return navigator;
     }
 
-    @Override
     public void setCaption(String caption) {
         setText(caption);
-        layout.setCaption(caption);
+    }
+
+    @Override
+    public void close() {
+        onClose(null);
+        getTabPane().getTabs().remove(this);
     }
 }

@@ -55,6 +55,7 @@ public class MainController implements Initializable {
 
         body.getStyleClass().add(CustomStyleClass.HRMS_ROOT_BACKGROUND);
         body.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
+
     }
 
     protected void initHandler() {

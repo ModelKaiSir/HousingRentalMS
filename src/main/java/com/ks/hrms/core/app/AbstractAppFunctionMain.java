@@ -3,40 +3,46 @@ package com.ks.hrms.core.app;
 import com.ks.hrms.core.component.form.AbstractForm;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.util.Callback;
 
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
-public abstract class AbstractAppFunctionMain extends TabPane implements FunctionMain, ToolBar.ButtonClickListener {
+public abstract class AbstractAppFunctionMain extends BorderPane implements FunctionMain, ToolBar.ButtonClickListener {
 
     public static final String STYLE_FUNCTION_CONTENT = "function_content";
     public static final String STYLE_FUNCTION_ROW_BOX = "function_row_box";
     public static final String STYLE_FUNCTION_COL_BOX = "function_col_box";
 
     protected Function function;
-    protected ToolBar toolBar;
+    protected ToolBar toolbar;
 
     private HashMap<DrawPoint, Node> drawPointHashMap;
+    private TabPane root;
 
     public AbstractAppFunctionMain() {
-        setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
         getStyleClass().add(STYLE_FUNCTION_CONTENT);
+        root = new TabPane();
+        fitToParent(this);
     }
 
     @Override
     public void init() {
+        root.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
         drawPointHashMap = new HashMap<>(16);
-        toolBar = new DefaultToolBar();
-        toolBar.setToolbarIds(getToolbarIds());
-        toolBar.setButtonClickListener(this);
+        toolbar = createToolbar();
+        toolbar.setButtonClickListener(this);
     }
 
     protected void addComponent(int tab, int row, int col, Node component) {
@@ -56,15 +62,17 @@ public abstract class AbstractAppFunctionMain extends TabPane implements Functio
      * 根据坐标分布情况不同 界面不同
      */
     protected void draw() {
+        root.getTabs().clear();
+        toolbar.draw();
 
-        toolBar.init();
-        getTabs().clear();
         Draws draws = new Draws();
         draws.init();
         draws.sorteds().forEach(e -> {
             draws.draw(e.getKey().tab, e.getKey().row, e.getKey().col, e.getValue());
         });
 
+        setTop((HBox) toolbar);
+        setCenter(root);
     }
 
     @Override
@@ -72,17 +80,26 @@ public abstract class AbstractAppFunctionMain extends TabPane implements Functio
         this.function = function;
     }
 
-    @Override
-    public void setCaption(String caption) {
+    public abstract ToolBar createToolbar();
 
+    public abstract ButtonType[] getToolbarTypes();
+
+    @Override
+    public void onClose(Callback call) {
+        call.call(null);
     }
 
     @Override
-    public void onClickButton(ButtonType type){
-
+    public void onOpen(Callback call) {
+        call.call(null);
     }
 
-    public abstract ButtonType[] getToolbarIds();
+    protected void fitToParent(Parent parent) {
+        AnchorPane.setTopAnchor(parent, 0.0);
+        AnchorPane.setBottomAnchor(parent, 0.0);
+        AnchorPane.setLeftAnchor(parent, 0.0);
+        AnchorPane.setRightAnchor(parent, 0.0);
+    }
 
     class DrawPoint {
 
@@ -176,7 +193,7 @@ public abstract class AbstractAppFunctionMain extends TabPane implements Functio
             Tab result;
             tabMap.put(tab, result = new Tab());
             result.setContent(generateContentPane());
-            getTabs().add(result);
+            root.getTabs().add(result);
             return result;
         }
 
@@ -224,24 +241,24 @@ public abstract class AbstractAppFunctionMain extends TabPane implements Functio
             return result;
         }
 
-        private void addRow(Tab tab, HBox rowBox){
+        private void addRow(Tab tab, HBox rowBox) {
             SplitPane content = (SplitPane) tab.getContent();
             content.getItems().add(new ScrollPane(rowBox));
         }
 
-        private HBox generateRowBox(){
+        private HBox generateRowBox() {
             HBox row = new HBox();
             row.getStyleClass().add(STYLE_FUNCTION_ROW_BOX);
             return row;
         }
 
-        private VBox generateColBox(){
+        private VBox generateColBox() {
             VBox col = new VBox();
             col.getStyleClass().add(STYLE_FUNCTION_COL_BOX);
             return col;
         }
 
-        private SplitPane generateContentPane(){
+        private SplitPane generateContentPane() {
             SplitPane splitPane = new SplitPane();
             splitPane.setOrientation(Orientation.VERTICAL);
             return splitPane;
