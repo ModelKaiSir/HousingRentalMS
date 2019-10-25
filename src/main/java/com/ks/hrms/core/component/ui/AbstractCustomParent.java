@@ -39,6 +39,8 @@ public abstract class AbstractCustomParent<T> implements CustomParent<T> {
      */
     public abstract void afterInit();
 
+    public abstract void setValue(T value);
+
     public AbstractCustomParent() {
 
     }

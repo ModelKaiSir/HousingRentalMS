@@ -7,12 +7,12 @@ import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 
-public class CustomTextArea extends AbstractCustomParent implements AbstractCustomParent.InitValue<String> {
+public class CustomTextArea extends AbstractCustomParent<String> implements AbstractCustomParent.InitValue<String> {
 
     private JFXTextArea area;
     private SimpleObjectProperty<HBox> contentProperty = new SimpleObjectProperty<>();
-    private ObjectProperty value = new SimpleObjectProperty();
-    private ObjectProperty initValue = new SimpleObjectProperty();
+    private SimpleObjectProperty<String> value = new SimpleObjectProperty();
+    private SimpleObjectProperty<String> initValue = new SimpleObjectProperty<String>();
 
     public CustomTextArea(String id, String caption) {
         super(id, caption);
@@ -22,7 +22,7 @@ public class CustomTextArea extends AbstractCustomParent implements AbstractCust
     public void init() {
 
         contentProperty.set(CustomComponentFactory.generateHBox());
-        Label lb = CustomComponentFactory.generateCaptionLb();
+        Label lb = CustomComponentFactory.generateCaptionLabel();
         area = CustomComponentFactory.generateTextAreaField();
         contentProperty.get().getChildren().addAll(lb,area);
 
@@ -56,7 +56,7 @@ public class CustomTextArea extends AbstractCustomParent implements AbstractCust
     }
 
     @Override
-    public Object getValue() {
+    public String getValue() {
         return value.get();
     }
 
@@ -69,6 +69,11 @@ public class CustomTextArea extends AbstractCustomParent implements AbstractCust
     public void setInitValue(String initValue) {
         this.initValue.set(initValue);
         area.setText(initValue);
+    }
+
+    @Override
+    public void setValue(String value) {
+        this.value.set(value);
     }
 
     @Override

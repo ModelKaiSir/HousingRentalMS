@@ -63,4 +63,9 @@ public class CustomButtonGroup extends AbstractCustomParent {
     public ObjectProperty valueProperty() {
         return null;
     }
+
+    @Override
+    public void setValue(Object value) {
+
+    }
 }

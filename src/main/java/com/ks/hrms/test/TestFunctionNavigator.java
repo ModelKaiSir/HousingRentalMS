@@ -2,7 +2,9 @@ package com.ks.hrms.test;
 
 import com.ks.hrms.core.app.DefaultFunctionNavigator;
 import com.ks.hrms.core.app.DefaultToolBar;
+import com.ks.hrms.core.app.Item;
 import com.ks.hrms.core.component.FormField;
+import com.ks.hrms.core.component.form.TableForm;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -50,5 +52,10 @@ public class TestFunctionNavigator extends DefaultFunctionNavigator<Test> {
         formFields.add(new FormField("phone", "手机号", FormField.TEXTFIELD));
         formFields.add(new FormField("userGroup", "用户组", FormField.COMBOBOX + userGroupType()));
         return formFields;
+    }
+
+    @Override
+    public Item<Test> getSelectItem() {
+        return new TestItem(getTableForm().getTable().getSelectionModel().getSelectedItem());
     }
 }

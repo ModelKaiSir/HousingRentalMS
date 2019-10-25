@@ -4,10 +4,12 @@ import com.jfoenix.controls.JFXButton;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 
 public class CustomButton extends AbstractCustomParent<String> {
 
-    private SimpleObjectProperty<JFXButton> contentProperty = new SimpleObjectProperty<>();
+    private Button button;
+    private SimpleObjectProperty<Button> contentProperty = new SimpleObjectProperty<>();
 
     public CustomButton(String fieldId,String caption) {
         super(fieldId,caption);
@@ -19,12 +21,15 @@ public class CustomButton extends AbstractCustomParent<String> {
 
     @Override
     public void init() {
-        contentProperty.set(CustomComponentFactory.generateButton(""));
-        contentProperty.get().prefHeightProperty().bind(heightProperty());
-        contentProperty.get().prefWidthProperty().bind(widthProperty());
-        contentProperty.get().textProperty().bind(captionProperty());
-        contentProperty.get().disableProperty().bind(disableProperty());
-        contentProperty.get().alignmentProperty().bind(posProperty());
+
+        button = CustomComponentFactory.generateButton(getCaption());
+        contentProperty.set(button);
+
+        button.prefHeightProperty().bind(heightProperty());
+        button.prefWidthProperty().bind(widthProperty());
+        button.textProperty().bind(captionProperty());
+        button.disableProperty().bind(disableProperty());
+        button.alignmentProperty().bind(posProperty());
     }
 
     @Override
@@ -33,7 +38,7 @@ public class CustomButton extends AbstractCustomParent<String> {
     }
 
     @Override
-    public ObjectProperty<JFXButton> contentProperty() {
+    public ObjectProperty<Button> contentProperty() {
         return contentProperty;
     }
 
@@ -50,6 +55,11 @@ public class CustomButton extends AbstractCustomParent<String> {
     @Override
     public ObjectProperty<String> valueProperty() {
         return null;
+    }
+
+    @Override
+    public void setValue(String value) {
+
     }
 }
 

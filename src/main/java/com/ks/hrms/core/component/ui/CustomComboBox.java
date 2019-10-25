@@ -2,7 +2,6 @@ package com.ks.hrms.core.component.ui;
 
 import com.jfoenix.controls.JFXComboBox;
 import com.ks.hrms.core.component.ui.extend.CaptionAble;
-import com.ks.hrms.utils.Utils;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -13,22 +12,22 @@ import javafx.scene.layout.HBox;
 
 import java.util.Map;
 
-public class CustomComboBox extends AbstractCustomParent<String> implements AbstractCustomParent.InitValue<Label>,CaptionAble<CustomComboBox> {
+public class CustomComboBox extends AbstractCustomParent<String> implements AbstractCustomParent.InitValue<Label>, CaptionAble<CustomComboBox> {
 
-    private ObservableMap<String,String> dataMap;
+    private ObservableMap<String, String> dataMap;
     private JFXComboBox<Label> comboBox;
 
     private SimpleObjectProperty<HBox> contentProperty = new SimpleObjectProperty<>();
     private SimpleObjectProperty<Label> initValueProperty = new SimpleObjectProperty<>();
 
     public CustomComboBox(String id, String caption) {
-        this(id,caption,null);
+        this(id, caption, null);
     }
 
     public CustomComboBox(String id, String caption, String initValue) {
         super.setFieldId(id);
         super.setCaption(caption);
-        if(null!=initValue){
+        if (null != initValue) {
             initValueProperty.set(new Label(initValue));
         }
     }
@@ -38,10 +37,10 @@ public class CustomComboBox extends AbstractCustomParent<String> implements Abst
     }
 
 
-    public void reset(){
+    public void reset() {
         comboBox.getItems().clear();
-        for (Map.Entry<String ,String> er:dataMap.entrySet()){
-            Label l = new Label(er.getKey()+"("+er.getValue()+")");
+        for (Map.Entry<String, String> er : dataMap.entrySet()) {
+            Label l = new Label(er.getKey() + "(" + er.getValue() + ")");
             l.setUserData(er.getValue());
             comboBox.getItems().add(l);
         }
@@ -60,8 +59,8 @@ public class CustomComboBox extends AbstractCustomParent<String> implements Abst
         comboBox = CustomComponentFactory.generateComBox(this);
         HBox root = CustomComponentFactory.generateHBox();
 
-        if(!hideCaption){
-            Label lb = CustomComponentFactory.generateCaptionLb();
+        if (!hideCaption) {
+            Label lb = CustomComponentFactory.generateCaptionLabel();
             lb.textProperty().bind(captionProperty());
             root.getChildren().add(lb);
         }
@@ -70,7 +69,7 @@ public class CustomComboBox extends AbstractCustomParent<String> implements Abst
 
         comboBox.prefHeightProperty().bind(heightProperty());
         comboBox.prefWidthProperty().bind(widthProperty());
-        bindProperty(comboBox.disableProperty(),comboBox.editableProperty());
+        bindProperty(comboBox.disableProperty(), comboBox.editableProperty());
         contentProperty.set(root);
 
     }
@@ -101,6 +100,15 @@ public class CustomComboBox extends AbstractCustomParent<String> implements Abst
     }
 
     @Override
+    public void setValue(String value) {
+        comboBox.getItems().stream().forEach(item -> {
+            if (item.getUserData().equals(value)) {
+                comboBox.getSelectionModel().select(item);
+            }
+        });
+    }
+
+    @Override
     public String getValue() {
         return comboBox.getValue().getText();
     }
@@ -112,7 +120,7 @@ public class CustomComboBox extends AbstractCustomParent<String> implements Abst
 
     @Override
     public void setWidth(double width) {
-        if(width <= 0){
+        if (width <= 0) {
             width = CustomComponentFactory.COMBO_BOX_MIN_WIDTH;
         }
         super.setWidth(width);

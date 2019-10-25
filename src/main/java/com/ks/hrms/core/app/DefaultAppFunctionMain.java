@@ -5,7 +5,7 @@ import com.google.common.base.Splitter;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.event.ActionEvent;
 
-public class DefaultAppFunctionMain extends AbstractAppFunctionMain {
+public class DefaultAppFunctionMain<T> extends AbstractAppFunctionMain<T> {
 
     private FunctionRequestListener requestListener;
 
@@ -42,7 +42,20 @@ public class DefaultAppFunctionMain extends AbstractAppFunctionMain {
 
     @Override
     public void onClickButton(ButtonType type) {
-        requestListener.request(this, type);
+        switch (type) {
+            case UPDATE:
+                this.update();
+                break;
+            case UNDO:
+                break;
+            case CLEAR:
+                break;
+            case DELETE:
+                break;
+            default:
+                requestListener.request(this, type);
+        }
+
     }
 
     @Override
@@ -52,6 +65,22 @@ public class DefaultAppFunctionMain extends AbstractAppFunctionMain {
 
     @Override
     public ButtonType[] getToolbarTypes() {
-        return new ButtonType[] {ButtonType.EXIT, ButtonType.UPDATE, ButtonType.UNDO, ButtonType.CLEAR};
+        return new ButtonType[]{ ButtonType.EXIT, ButtonType.UPDATE, ButtonType.UNDO, ButtonType.CLEAR };
+    }
+
+    @Override
+    public void newItem() {
+        System.out.println("newItem");
+    }
+
+    @Override
+    public void setItem(Item<T> item) {
+        System.out.println("setItem");
+    }
+
+    @Override
+    public boolean update() {
+        System.out.println("update");
+        return true;
     }
 }

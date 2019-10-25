@@ -42,4 +42,9 @@ public class DefaultFunctionNavigator<S> extends AbstractFunctionNavigator<S> {
     public void setFunctionRequestListener(FunctionRequestListener listener) {
         requestListener = listener;
     }
+
+    @Override
+    public Item getSelectItem() {
+        return null;
+    }
 }

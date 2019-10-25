@@ -7,9 +7,8 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import org.omg.PortableInterceptor.INACTIVE;
 
-public class CustomTextField extends AbstractCustomParent implements AbstractCustomParent.InitValue<String> {
+public class CustomTextField extends AbstractCustomParent<String> implements AbstractCustomParent.InitValue<String> {
 
     private Label lb;
     private JFXTextField input;
@@ -19,7 +18,7 @@ public class CustomTextField extends AbstractCustomParent implements AbstractCus
     private SimpleObjectProperty<String> initValueProperty = new SimpleObjectProperty<String>();
     private SimpleObjectProperty<String> valueProperty = new SimpleObjectProperty<String>();
 
-    public CustomTextField(String id,String caption,String initValue) {
+    public CustomTextField(String id, String caption, String initValue) {
         super.setFieldId(id);
         super.setCaption(caption);
         initValueProperty.set(initValue);
@@ -27,12 +26,12 @@ public class CustomTextField extends AbstractCustomParent implements AbstractCus
     }
 
     public CustomTextField(String id, String caption) {
-        this(id,caption,null);
+        this(id, caption, null);
     }
 
     @Override
-    public void init(){
-        lb = CustomComponentFactory.generateCaptionLb();
+    public void init() {
+        lb = CustomComponentFactory.generateCaptionLabel();
         input = CustomComponentFactory.generateTextField();
 
         lb.textProperty().bind(captionProperty());
@@ -40,16 +39,16 @@ public class CustomTextField extends AbstractCustomParent implements AbstractCus
         input.prefHeightProperty().bind(heightProperty());
         input.editableProperty().bind(editableProperty());
 
-        input.textProperty().addListener((obs,old,nv) -> {
+        input.textProperty().addListener((obs, old, nv) -> {
             valueProperty.set(nv);
         });
 
-        valueProperty.addListener((obs,old,nv) -> {
+        valueProperty.addListener((obs, old, nv) -> {
             input.setText(nv);
         });
 
-        HBox root = CustomComponentFactory.generateHBox(lb,input);
-        bindProperty(input.disableProperty(),input.editableProperty());
+        HBox root = CustomComponentFactory.generateHBox(lb, input);
+        bindProperty(input.disableProperty(), input.editableProperty());
         validator = new RequiredFieldValidator();
         validator.setMessage("不能为空！");
         contentProperty.set(root);
@@ -83,13 +82,13 @@ public class CustomTextField extends AbstractCustomParent implements AbstractCus
 
     @Override
     public void afterInit() {
-        if(isRequired()){
+        if (isRequired()) {
             input.setValidators(validator);
         }
     }
 
     @Override
-    public Object getValue() {
+    public String getValue() {
         return valueProperty.get();
     }
 
@@ -99,8 +98,13 @@ public class CustomTextField extends AbstractCustomParent implements AbstractCus
     }
 
     @Override
+    public void setValue(String value) {
+        valueProperty.set(value);
+    }
+
+    @Override
     public void setWidth(double width) {
-        if(width <= 0){
+        if (width <= 0) {
             width = CustomComponentFactory.COMBO_BOX_MIN_WIDTH;
         }
         super.setWidth(width);

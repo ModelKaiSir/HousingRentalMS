@@ -12,13 +12,17 @@ import javafx.scene.layout.HBox;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomRadioBox extends AbstractCustomParent implements AbstractCustomParent.InitValue<String>{
+public class CustomRadioBox extends AbstractCustomParent<String> implements AbstractCustomParent.InitValue<String>{
 
     final ToggleGroup group = new ToggleGroup();
-    private ArrayList<RadioButton> radioButtons;
-    private Label lb;
+
+    private ArrayList<RadioButton> radioButtonList;
+    private Label captionLabel;
+
     private SimpleObjectProperty<HBox> rootProperty = new SimpleObjectProperty<>();
     private SimpleObjectProperty<String> initValueProperty = new SimpleObjectProperty<>();
+
+    private SimpleObjectProperty<String> valueProperty = new SimpleObjectProperty<>();
 
     public CustomRadioBox(String fieldId, String caption) {
         super(fieldId,caption);
@@ -26,38 +30,57 @@ public class CustomRadioBox extends AbstractCustomParent implements AbstractCust
 
     public CustomRadioBox(String fieldId, String caption,String defaultValue) {
         super(fieldId,caption);
+        valueProperty.set(defaultValue);
     }
 
 
     @Override
     public void setCaption(String caption) {
         super.setCaption(caption);
-        lb.setText(caption);
+        captionLabel.setText(caption);
     }
 
     public void addSelect(List<FormField.FormFieldAttribute> itemList){
 
         for (FormField.FormFieldAttribute item:itemList){
-            RadioButton r =CustomComponentFactory.generateRadioBox(item.getKey(),item.getValue(),group);
+            RadioButton r = CustomComponentFactory.generateRadioBox(item.getKey(),item.getValue(),group);
             r.disableProperty().bind(disableProperty());
-            radioButtons.add(r);
+            radioButtonList.add(r);
             rootProperty.get().getChildren().add(r);
         }
     }
 
     @Override
     public void init() {
-        lb = CustomComponentFactory.generateCaptionLb();
-        lb.textProperty().bind(captionProperty());
-        HBox root = CustomComponentFactory.generateHBox(lb);
+
+        captionLabel = CustomComponentFactory.generateCaptionLabel();
+        captionLabel.textProperty().bind(captionProperty());
+        HBox root = CustomComponentFactory.generateHBox(captionLabel);
 
         rootProperty.set(root);
-        radioButtons = new ArrayList<>();
+        radioButtonList = new ArrayList<>();
+
         initValueProperty.addListener((observable,old,newValue) ->{
-            radioButtons.forEach(i ->{
+            radioButtonList.forEach(i ->{
                 if(i.getUserData().equals(newValue)){
                     i.setSelected(true);
                     i.requestFocus();
+                }
+            });
+        });
+
+        group.selectedToggleProperty().addListener((obs, oldValue, newValue) ->{
+            RadioButton r = (RadioButton) newValue;
+            valueProperty.set((String) r.getUserData());
+        });
+
+        valueProperty.addListener((obs, oldValue, newValue) ->{
+            group.getToggles().stream().forEach(t ->{
+
+                RadioButton r = (RadioButton) t;
+
+                if(!r.isSelected() && r.getUserData().equals(newValue)){
+                    r.setSelected(true);
                 }
             });
         });
@@ -89,12 +112,17 @@ public class CustomRadioBox extends AbstractCustomParent implements AbstractCust
     }
 
     @Override
-    public Object getValue() {
-        return null;
+    public String getValue() {
+        return valueProperty.get();
     }
 
     @Override
     public ObjectProperty valueProperty() {
-        return null;
+        return valueProperty;
+    }
+
+    @Override
+    public void setValue(String value) {
+        valueProperty.set(value);
     }
 }

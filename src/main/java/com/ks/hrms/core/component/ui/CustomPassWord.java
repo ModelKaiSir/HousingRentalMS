@@ -1,7 +1,6 @@
 package com.ks.hrms.core.component.ui;
 
 import com.jfoenix.controls.JFXPasswordField;
-import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RequiredFieldValidator;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -9,7 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 
-public class CustomPassWord extends AbstractCustomParent implements AbstractCustomParent.InitValue<String> {
+public class CustomPassWord extends AbstractCustomParent<String> implements AbstractCustomParent.InitValue<String> {
 
     private Label lb;
     private JFXPasswordField input;
@@ -32,7 +31,7 @@ public class CustomPassWord extends AbstractCustomParent implements AbstractCust
 
     @Override
     public void init(){
-        lb = CustomComponentFactory.generateCaptionLb();
+        lb = CustomComponentFactory.generateCaptionLabel();
         input = CustomComponentFactory.generatePasswordField();
 
         lb.textProperty().bind(captionProperty());
@@ -88,13 +87,18 @@ public class CustomPassWord extends AbstractCustomParent implements AbstractCust
     }
 
     @Override
-    public Object getValue() {
+    public String getValue() {
         return valueProperty.get();
     }
 
     @Override
     public ObjectProperty valueProperty() {
         return valueProperty;
+    }
+
+    @Override
+    public void setValue(String value) {
+        valueProperty.set(value);
     }
 
     @Override

@@ -4,9 +4,7 @@ import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTimePicker;
 import com.ks.hrms.core.component.ui.extend.CaptionAble;
 import com.ks.hrms.utils.Utils;
-import com.sun.javaws.util.JfxHelper;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.event.EventHandler;
@@ -14,12 +12,9 @@ import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
-import org.springframework.cglib.core.Local;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 /**
@@ -69,7 +64,7 @@ public class CustomDatePicker extends AbstractCustomParent<String> implements Ab
     private void initDateTime() {
 
         if(!hideCaption){
-            Label lb = CustomComponentFactory.generateCaptionLb();
+            Label lb = CustomComponentFactory.generateCaptionLabel();
             lb.textProperty().bind(captionProperty());
             content.get().getChildren().add(lb);
         }
@@ -150,6 +145,11 @@ public class CustomDatePicker extends AbstractCustomParent<String> implements Ab
     @Override
     public String getValue() {
         return value.get();
+    }
+
+    @Override
+    public void setValue(String value) {
+        this.value.set(value);
     }
 
     @Override

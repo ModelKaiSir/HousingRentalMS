@@ -13,7 +13,7 @@ import javafx.scene.layout.BorderPane;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public abstract class AbstractAppFunction extends Tab implements Function, FunctionComponent {
+public abstract class AbstractAppFunction<T> extends Tab implements Function<T>, FunctionComponent {
 
     public static final String STYLESHEET = "UI/functionUI.css";
     public static final String STYLE_FUNCTION = "function";
@@ -106,6 +106,10 @@ public abstract class AbstractAppFunction extends Tab implements Function, Funct
     @Override
     public FunctionNavigator getNavigator() {
         return navigator;
+    }
+
+    public FunctionLayout getLayout() {
+        return layout;
     }
 
     public void setCaption(String caption) {

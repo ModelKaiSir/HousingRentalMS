@@ -64,6 +64,10 @@ public abstract class AbstractFunctionNavigator<S> extends SplitPane implements 
         this.caption = caption;
     }
 
+    public TableForm<S> getTableForm() {
+        return tableForm;
+    }
+
     public abstract ToolBar createToolBar();
 
     public abstract ArrayList<FormField> getFormFields();

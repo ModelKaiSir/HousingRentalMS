@@ -8,9 +8,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -65,7 +63,7 @@ public class CustomCheckBox extends AbstractCustomParent<String> implements Abst
         HBox root = CustomComponentFactory.generateHBox();
 
         if(!hideCaption){
-            Label lb = CustomComponentFactory.generateCaptionLb();
+            Label lb = CustomComponentFactory.generateCaptionLabel();
             lb.textProperty().bind(captionProperty());
             root.getChildren().add(lb);
         }
@@ -122,6 +120,11 @@ public class CustomCheckBox extends AbstractCustomParent<String> implements Abst
     @Override
     public ObjectProperty valueProperty() {
         return value;
+    }
+
+    @Override
+    public void setValue(String value) {
+        this.value.set(value);
     }
 
     public SimpleBooleanProperty updateProperty() {

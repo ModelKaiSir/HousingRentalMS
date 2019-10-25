@@ -54,7 +54,7 @@ public class CustomComponentFactory {
         }
     };
 
-    public static Label generateCaptionLb() {
+    public static Label generateCaptionLabel() {
         Label lb = new Label();
         lb.setMinWidth(LB_MIN_WIDTH);
         lb.setMaxWidth(LB_MAX_WIDTH);

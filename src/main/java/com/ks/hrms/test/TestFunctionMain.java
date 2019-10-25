@@ -2,6 +2,7 @@ package com.ks.hrms.test;
 
 import com.ks.hrms.core.app.ButtonType;
 import com.ks.hrms.core.app.DefaultAppFunctionMain;
+import com.ks.hrms.core.app.Item;
 import com.ks.hrms.core.app.ToolBar;
 import com.ks.hrms.core.component.FormField;
 import com.ks.hrms.core.component.form.FreeForm;
@@ -13,7 +14,7 @@ import javafx.util.Callback;
 
 import java.util.ArrayList;
 
-public class TestFunctionMain extends DefaultAppFunctionMain {
+public class TestFunctionMain extends DefaultAppFunctionMain<Test> {
 
     protected FreeForm freeForm;
     protected ArrayList<FormField> formFields;
@@ -39,12 +40,18 @@ public class TestFunctionMain extends DefaultAppFunctionMain {
 
     @Override
     public void onClickButton(ButtonType type) {
-        switch (type){
-            case EXIT:
-                System.out.println("点击了EXIT");
-                close();
-                break;
-        }
+        super.onClickButton(type);
+    }
+
+    @Override
+    public void setItem(Item<Test> item) {
+        super.setItem(item);
+        Test test = item.toBean();
+        freeForm.getField("userName").setValue(test.getUserName());
+        freeForm.getField("sex").setValue(test.getSex());
+        freeForm.getField("phone").setValue(test.getPhone());
+        freeForm.getField("userGroup").setValue(test.getUserGroup());
+
     }
 
     private String sexType() {

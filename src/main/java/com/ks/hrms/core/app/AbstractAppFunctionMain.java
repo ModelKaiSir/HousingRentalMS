@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
-public abstract class AbstractAppFunctionMain extends BorderPane implements FunctionMain, ToolBar.ButtonClickListener {
+public abstract class AbstractAppFunctionMain<T> extends BorderPane implements FunctionMain<T>, ToolBar.ButtonClickListener {
 
     public static final String STYLE_FUNCTION_CONTENT = "function_content";
     public static final String STYLE_FUNCTION_ROW_BOX = "function_row_box";
@@ -30,6 +30,7 @@ public abstract class AbstractAppFunctionMain extends BorderPane implements Func
 
     private HashMap<DrawPoint, Node> drawPointHashMap;
     private TabPane root;
+    private FunctionMode functionMode;
 
     public AbstractAppFunctionMain() {
         getStyleClass().add(STYLE_FUNCTION_CONTENT);
@@ -92,6 +93,16 @@ public abstract class AbstractAppFunctionMain extends BorderPane implements Func
     @Override
     public void onOpen(Callback call) {
         call.call(null);
+    }
+
+    @Override
+    public void setFunctionMode(FunctionMode functionMode) {
+        this.functionMode = functionMode;
+    }
+
+    @Override
+    public FunctionMode getFunctionMode() {
+        return functionMode;
     }
 
     protected void fitToParent(Parent parent) {

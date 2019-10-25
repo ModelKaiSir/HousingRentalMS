@@ -19,7 +19,7 @@ public abstract class AbstractAppFunctionLayout extends AnchorPane implements Fu
 
     @Override
     public void setFocusedFunctionComponent(FunctionComponent c) {
-        getChildren().removeAll();
+        getChildren().clear();
         focusedComponent.set(c);
         getChildren().add((Parent) c);
         fitToParent((Parent) c);
